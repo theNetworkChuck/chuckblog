@@ -6,7 +6,7 @@ tags:
   - networkchuck
   - blog
 ---
-# Obsidian
+# Obsidian - Why I love it
 
 - Obsidian is the BEST notes application in the world. Go download it: https://obsidian.md/
 
