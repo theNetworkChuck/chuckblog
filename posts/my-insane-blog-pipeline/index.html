@@ -446,6 +446,162 @@ Setting up Hugo Install Hugo Prerequisites Install Git: https://github.com/git-g
 </span></span><span style="display:flex;"><span>git subtree split --prefix public -b hostinger-deploy
 </span></span><span style="display:flex;"><span>git push origin hostinger-deploy:hostinger --force
 </span></span><span style="display:flex;"><span>git branch -D hostinger-deploy
+</span></span></code></pre></div><h1 id="the-mega-script">The Mega Script<a href="#the-mega-script" class="hanchor" ariaLabel="Anchor">#</a> </h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#75715e"># PowerShell Script for Windows</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Set variables for Obsidian to Hugo copy</span>
+</span></span><span style="display:flex;"><span>$sourcePath = <span style="color:#e6db74">&#34;C:\Users\chuck\Documents\my_second_brain\neotokos\posts\&#34;</span>
+</span></span><span style="display:flex;"><span>$destinationPath = <span style="color:#e6db74">&#34;C:\Users\chuck\Documents\chuckblog\content\posts\&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Set Github repo </span>
+</span></span><span style="display:flex;"><span>$myrepo = git@github.com<span style="color:#960050;background-color:#1e0010">:</span>thenetworkchuck/chuckblog.git
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Set error handling</span>
+</span></span><span style="display:flex;"><span>$ErrorActionPreference = <span style="color:#e6db74">&#34;Stop&#34;</span>
+</span></span><span style="display:flex;"><span>Set-StrictMode -Version Latest
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Change to the script&#39;s directory</span>
+</span></span><span style="display:flex;"><span>$ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
+</span></span><span style="display:flex;"><span>Set-Location $ScriptDir
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Check for required commands</span>
+</span></span><span style="display:flex;"><span>$requiredCommands = @(<span style="color:#e6db74">&#39;git&#39;</span>, <span style="color:#e6db74">&#39;hugo&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Check for Python command (python or python3)</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (Get-Command <span style="color:#e6db74">&#39;python&#39;</span> -ErrorAction SilentlyContinue) {
+</span></span><span style="display:flex;"><span>    $pythonCommand = <span style="color:#e6db74">&#39;python&#39;</span>
+</span></span><span style="display:flex;"><span>} <span style="color:#66d9ef">elseif</span> (Get-Command <span style="color:#e6db74">&#39;python3&#39;</span> -ErrorAction SilentlyContinue) {
+</span></span><span style="display:flex;"><span>    $pythonCommand = <span style="color:#e6db74">&#39;python3&#39;</span>
+</span></span><span style="display:flex;"><span>} <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>    Write-Error <span style="color:#e6db74">&#34;Python is not installed or not in PATH.&#34;</span>
+</span></span><span style="display:flex;"><span>    exit <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">foreach</span> ($cmd <span style="color:#66d9ef">in</span> $requiredCommands) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">-not</span> (Get-Command $cmd -ErrorAction SilentlyContinue)) {
+</span></span><span style="display:flex;"><span>        Write-Error <span style="color:#e6db74">&#34;</span>$cmd<span style="color:#e6db74"> is not installed or not in PATH.&#34;</span>
+</span></span><span style="display:flex;"><span>        exit <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Step 1: Check if Git is initialized, and initialize if necessary</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (<span style="color:#f92672">-not</span> (Test-Path <span style="color:#e6db74">&#34;.git&#34;</span>)) {
+</span></span><span style="display:flex;"><span>    Write-Host <span style="color:#e6db74">&#34;Initializing Git repository...&#34;</span>
+</span></span><span style="display:flex;"><span>    git init
+</span></span><span style="display:flex;"><span>    git remote add origin $myrepo
+</span></span><span style="display:flex;"><span>} <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>    Write-Host <span style="color:#e6db74">&#34;Git repository already initialized.&#34;</span>
+</span></span><span style="display:flex;"><span>    $remotes = git remote
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">-not</span> ($remotes <span style="color:#f92672">-contains</span> <span style="color:#e6db74">&#39;origin&#39;</span>)) {
+</span></span><span style="display:flex;"><span>        Write-Host <span style="color:#e6db74">&#34;Adding remote origin...&#34;</span>
+</span></span><span style="display:flex;"><span>        git remote add origin $myrepo
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Step 2: Sync posts from Obsidian to Hugo content folder using Robocopy</span>
+</span></span><span style="display:flex;"><span>Write-Host <span style="color:#e6db74">&#34;Syncing posts from Obsidian...&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (<span style="color:#f92672">-not</span> (Test-Path $sourcePath)) {
+</span></span><span style="display:flex;"><span>    Write-Error <span style="color:#e6db74">&#34;Source path does not exist: </span>$sourcePath<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>    exit <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (<span style="color:#f92672">-not</span> (Test-Path $destinationPath)) {
+</span></span><span style="display:flex;"><span>    Write-Error <span style="color:#e6db74">&#34;Destination path does not exist: </span>$destinationPath<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>    exit <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Use Robocopy to mirror the directories</span>
+</span></span><span style="display:flex;"><span>$robocopyOptions = @(<span style="color:#e6db74">&#39;/MIR&#39;</span>, <span style="color:#e6db74">&#39;/Z&#39;</span>, <span style="color:#e6db74">&#39;/W:5&#39;</span>, <span style="color:#e6db74">&#39;/R:3&#39;</span>)
+</span></span><span style="display:flex;"><span>$robocopyResult = robocopy $sourcePath $destinationPath @robocopyOptions
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> ($LASTEXITCODE <span style="color:#f92672">-ge</span> <span style="color:#ae81ff">8</span>) {
+</span></span><span style="display:flex;"><span>    Write-Error <span style="color:#e6db74">&#34;Robocopy failed with exit code </span>$LASTEXITCODE<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>    exit <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Step 3: Process Markdown files with Python script to handle image links</span>
+</span></span><span style="display:flex;"><span>Write-Host <span style="color:#e6db74">&#34;Processing image links in Markdown files...&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (<span style="color:#f92672">-not</span> (Test-Path <span style="color:#e6db74">&#34;images.py&#34;</span>)) {
+</span></span><span style="display:flex;"><span>    Write-Error <span style="color:#e6db74">&#34;Python script images.py not found.&#34;</span>
+</span></span><span style="display:flex;"><span>    exit <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Execute the Python script</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>    &amp; $pythonCommand images.py
+</span></span><span style="display:flex;"><span>} <span style="color:#66d9ef">catch</span> {
+</span></span><span style="display:flex;"><span>    Write-Error <span style="color:#e6db74">&#34;Failed to process image links.&#34;</span>
+</span></span><span style="display:flex;"><span>    exit <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Step 4: Build the Hugo site</span>
+</span></span><span style="display:flex;"><span>Write-Host <span style="color:#e6db74">&#34;Building the Hugo site...&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>    hugo
+</span></span><span style="display:flex;"><span>} <span style="color:#66d9ef">catch</span> {
+</span></span><span style="display:flex;"><span>    Write-Error <span style="color:#e6db74">&#34;Hugo build failed.&#34;</span>
+</span></span><span style="display:flex;"><span>    exit <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Step 5: Add changes to Git</span>
+</span></span><span style="display:flex;"><span>Write-Host <span style="color:#e6db74">&#34;Staging changes for Git...&#34;</span>
+</span></span><span style="display:flex;"><span>$hasChanges = (git status --porcelain) <span style="color:#f92672">-ne</span> <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (<span style="color:#f92672">-not</span> $hasChanges) {
+</span></span><span style="display:flex;"><span>    Write-Host <span style="color:#e6db74">&#34;No changes to stage.&#34;</span>
+</span></span><span style="display:flex;"><span>} <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>    git add .
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Step 6: Commit changes with a dynamic message</span>
+</span></span><span style="display:flex;"><span>$commitMessage = <span style="color:#e6db74">&#34;New Blog Post on </span>$(Get-Date -Format <span style="color:#e6db74">&#39;yyyy-MM-dd HH:mm:ss&#39;</span>)<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>$hasStagedChanges = (git diff --cached --name-only) <span style="color:#f92672">-ne</span> <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (<span style="color:#f92672">-not</span> $hasStagedChanges) {
+</span></span><span style="display:flex;"><span>    Write-Host <span style="color:#e6db74">&#34;No changes to commit.&#34;</span>
+</span></span><span style="display:flex;"><span>} <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>    Write-Host <span style="color:#e6db74">&#34;Committing changes...&#34;</span>
+</span></span><span style="display:flex;"><span>    git commit -m <span style="color:#e6db74">&#34;</span>$commitMessage<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Step 7: Push all changes to the main branch</span>
+</span></span><span style="display:flex;"><span>Write-Host <span style="color:#e6db74">&#34;Deploying to GitHub Master...&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>    git push origin master
+</span></span><span style="display:flex;"><span>} <span style="color:#66d9ef">catch</span> {
+</span></span><span style="display:flex;"><span>    Write-Error <span style="color:#e6db74">&#34;Failed to push to Master branch.&#34;</span>
+</span></span><span style="display:flex;"><span>    exit <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Step 8: Push the public folder to the hostinger branch using subtree split and force push</span>
+</span></span><span style="display:flex;"><span>Write-Host <span style="color:#e6db74">&#34;Deploying to GitHub Hostinger...&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Check if the temporary branch exists and delete it</span>
+</span></span><span style="display:flex;"><span>$branchExists = git branch --list <span style="color:#e6db74">&#34;hostinger-deploy&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> ($branchExists) {
+</span></span><span style="display:flex;"><span>    git branch -D hostinger-deploy
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Perform subtree split</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>    git subtree split --prefix public -b hostinger-deploy
+</span></span><span style="display:flex;"><span>} <span style="color:#66d9ef">catch</span> {
+</span></span><span style="display:flex;"><span>    Write-Error <span style="color:#e6db74">&#34;Subtree split failed.&#34;</span>
+</span></span><span style="display:flex;"><span>    exit <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Push to hostinger branch with force</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>    git push origin hostinger-deploy<span style="color:#960050;background-color:#1e0010">:</span>hostinger --force
+</span></span><span style="display:flex;"><span>} <span style="color:#66d9ef">catch</span> {
+</span></span><span style="display:flex;"><span>    Write-Error <span style="color:#e6db74">&#34;Failed to push to hostinger branch.&#34;</span>
+</span></span><span style="display:flex;"><span>    git branch -D hostinger-deploy
+</span></span><span style="display:flex;"><span>    exit <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Delete the temporary branch</span>
+</span></span><span style="display:flex;"><span>git branch -D hostinger-deploy
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Write-Host <span style="color:#e6db74">&#34;All done! Site synced, processed, committed, built, and deployed.&#34;</span>
 </span></span></code></pre></div>
       </div></div>
 
@@ -463,6 +619,12 @@ Setting up Hugo Install Hugo Prerequisites Install Git: https://github.com/git-g
       </a>
     
     
+      ::
+    
+    
+      <a href="/posts/another-test/" class="button inline next">
+        PLEAAASSEE WORK
+      </a>
     
   </div>
 </div>
