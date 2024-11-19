@@ -7,9 +7,7 @@ tags:
   - tutorial
 ---
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/3fg7Ht0DSnE?si=EEsYWxeLlLTsGls5" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-
+Here is the video: https://youtu.be/3fg7Ht0DSnE?si=gyqIdakpKI0Qf1Fy
 # What the junk is this?
 
 - This is the 3rd video in my Home Assistant series. This video picks up where I left off (and where I failed) in my last video attempting to replace Alexa with my own, fully local, AI voice assistant.
