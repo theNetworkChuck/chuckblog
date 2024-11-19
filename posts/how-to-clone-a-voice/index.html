@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>How to Clone a Voice (Open-Source) :: Terminal</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content=" What the junk is this? This is the 3rd video in my Home Assistant series. This video picks up where I left off (and where I failed) in my last video attempting to replace Alexa with my own, fully local, AI voice assistant. I did everything but create a custom AI voice, specifically the voice of Terry Crews. In this video, I FINALLY figured out a consistent way to clone a voice from pretty much any source. But it has to be LOCAL and FREE. You can clone my voice I am giving you permission to clone my voice&hellip;but not for commercial purposes or for content creation. You are only allowed to use my voice as your personal voice assistant. If you would like to clone my voice, here is the voice dataset: https://drive.google.com/drive/folders/1i6mWm8z2K_3rtanrVn1UcNgw5LQ0Zyv6?usp=sharing What Do You Need? &hellip;just a computer. But if you have a GPU&hellip;.better.
+" />
+<meta name="keywords" content="" />
+
+  <meta name="robots" content="noodp" />
+
+<link rel="canonical" href="/posts/how-to-clone-a-voice/" />
+
+
+
+
+
+  
+  <link rel="stylesheet" href="/css/buttons.min.2bc533403a27dfe0e93105a92502b42ce4587e2e4a87d9f7d349e51e16e09478.css">
+
+  
+  <link rel="stylesheet" href="/css/code.min.00125962708925857e7b66dbc58391d55be1191a3d0ce2034de8c9cd2c481c36.css">
+
+  
+  <link rel="stylesheet" href="/css/fonts.min.4881f0c525f3ce2a1864fb6e96676396cebe1e6fcef1933e8e1dde7041004fb5.css">
+
+  
+  <link rel="stylesheet" href="/css/footer.min.2e3eb191baee58dd05a9f0104ac1fab0827bca7c64dafe0b2579f934c33a1d69.css">
+
+  
+  <link rel="stylesheet" href="/css/gist.min.a751e8b0abe1ba8bc53ced52a38b19d8950fe78ca29454ea8c2595cf26aad5c0.css">
+
+  
+  <link rel="stylesheet" href="/css/header.min.b6fb4423cf82a9f9d7abc9cd010223fa3d70a6526a3f28f8e17d814c06e18f9e.css">
+
+  
+  <link rel="stylesheet" href="/css/main.min.fe8dc560fccb53a458b0db19ccb7b265764ac46b68596b7e099c6793054dd457.css">
+
+  
+  <link rel="stylesheet" href="/css/menu.min.83637a90d903026bc280d3f82f96ceb06c5fc72b7c1a8d686afb5bbf818a29f7.css">
+
+  
+  <link rel="stylesheet" href="/css/pagination.min.82f6400eae7c7c6dc3c866733c2ec0579e4089608fea69400ff85b3880aa0d3c.css">
+
+  
+  <link rel="stylesheet" href="/css/post.min.fc74ca360273c1d828da3c02b8174eba435607b369d98418ccc6f2243cd4e75d.css">
+
+  
+  <link rel="stylesheet" href="/css/prism.min.9023bbc24533d09e97a51a0a42a5a7bfe4c591ae167c5551fb1d2191d11977c0.css">
+
+  
+  <link rel="stylesheet" href="/css/syntax.min.cc789ed9377260d7949ea4c18781fc58959a89287210fe4edbff44ebfc1511b6.css">
+
+  
+  <link rel="stylesheet" href="/css/terminal.min.dd0bf9c7cacb24c1b0184f52f1869b274e06689557468cc7030ccf632328eb97.css">
+
+  
+  <link rel="stylesheet" href="/css/terms.min.b81791663c3790e738e571cdbf802312390d30e4b1d8dc9d814a5b5454d0ac11.css">
+
+
+
+
+
+
+
+<link rel="shortcut icon" href="/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+
+<meta name="twitter:card" content="summary" />
+
+  
+    <meta name="twitter:site" content="" />
+  
+    <meta name="twitter:creator" content="" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="How to Clone a Voice (Open-Source)">
+<meta property="og:description" content=" What the junk is this? This is the 3rd video in my Home Assistant series. This video picks up where I left off (and where I failed) in my last video attempting to replace Alexa with my own, fully local, AI voice assistant. I did everything but create a custom AI voice, specifically the voice of Terry Crews. In this video, I FINALLY figured out a consistent way to clone a voice from pretty much any source. But it has to be LOCAL and FREE. You can clone my voice I am giving you permission to clone my voice&hellip;but not for commercial purposes or for content creation. You are only allowed to use my voice as your personal voice assistant. If you would like to clone my voice, here is the voice dataset: https://drive.google.com/drive/folders/1i6mWm8z2K_3rtanrVn1UcNgw5LQ0Zyv6?usp=sharing What Do You Need? &hellip;just a computer. But if you have a GPU&hellip;.better.
+" />
+<meta property="og:url" content="/posts/how-to-clone-a-voice/" />
+<meta property="og:site_name" content="Terminal" />
+
+  <meta property="og:image" content="/og-image.png">
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+
+  <meta property="article:published_time" content="2024-11-19 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+
+
+<div class="container">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    Terminal
+  </div>
+</a>
+
+    </div>
+    
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/showcase">Showcase</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
+    
+  </div>
+  
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
+    
+      
+        
+          <li><a href="/about" >About</a></li>
+        
+      
+        
+          <li><a href="/showcase" >Showcase</a></li>
+        
+      
+      
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="/posts/how-to-clone-a-voice/">How to Clone a Voice (Open-Source)</a>
+  </h1>
+  <div class="post-meta"><time class="post-date">2024-11-19</time></div>
+
+  
+    <span class="post-tags">
+      
+      #<a href="/tags/networkchuck/">NetworkChuck</a>&nbsp;
+      
+      #<a href="/tags/tutorial/">tutorial</a>&nbsp;
+      
+    </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <!-- raw HTML omitted -->
+<h1 id="what-the-junk-is-this">What the junk is this?<a href="#what-the-junk-is-this" class="hanchor" ariaLabel="Anchor">#</a> </h1>
+<ul>
+<li>This is the 3rd video in my Home Assistant series. This video picks up where I left off (and where I failed) in my last video attempting to replace Alexa with my own, fully local, AI voice assistant.</li>
+<li>I did everything but create a custom AI voice, specifically the voice of Terry Crews.</li>
+<li>In this video, I FINALLY figured out a consistent way to clone a voice from pretty much any source. But it has to be LOCAL and FREE.</li>
+</ul>
+<h1 id="you-can-clone-my-voice">You can clone my voice<a href="#you-can-clone-my-voice" class="hanchor" ariaLabel="Anchor">#</a> </h1>
+<ul>
+<li>I am giving you permission to clone my voice&hellip;but not for commercial purposes or for content creation. You are only allowed to use my voice as your personal voice assistant.</li>
+<li>If you would like to clone my voice, here is the voice dataset: <a href="https://drive.google.com/drive/folders/1i6mWm8z2K_3rtanrVn1UcNgw5LQ0Zyv6?usp=sharing">https://drive.google.com/drive/folders/1i6mWm8z2K_3rtanrVn1UcNgw5LQ0Zyv6?usp=sharing</a></li>
+</ul>
+<h1 id="what-do-you-need">What Do You Need?<a href="#what-do-you-need" class="hanchor" ariaLabel="Anchor">#</a> </h1>
+<p>&hellip;just a computer. But if you have a GPU&hellip;.better.</p>
+<p>Here is what I am using and demonstrating in this video:</p>
+<ul>
+<li>Laptop with an Nvidia 3080 GPU</li>
+<li>Terry (my AI PC that I built in this video &mdash;&gt; <a href="https://youtu.be/Wjrdr0NU4Sk?si=_zlFoZq5g3jAcntA">https://youtu.be/Wjrdr0NU4Sk?si=_zlFoZq5g3jAcntA</a>) rocking dual Nvidia 4090s</li>
+<li>A cloud GPU (AWS EC2 instance)
+<ul>
+<li>I used a <em>g5.12xlarge</em> instance (4 GPUs)</li>
+</ul>
+</li>
+</ul>
+<h1 id="step-1---data-prep">Step 1 - Data Prep<a href="#step-1---data-prep" class="hanchor" ariaLabel="Anchor">#</a> </h1>
+<ul>
+<li>The key to any AI project is getting CLEAN DATA. Let&rsquo;s do that now.</li>
+<li>For this tutorial, I&rsquo;m going to show you two options:
+<ul>
+<li>Record <em>your voice</em> using the Piper Recording Studio</li>
+<li>Pull audio data from YouTube videos</li>
+</ul>
+</li>
+</ul>
+<h2 id="the-piper-recording-studio">the Piper Recording Studio<a href="#the-piper-recording-studio" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<p>This option is for you if you want to clone your own voice (or someone close to you) and you are willing to sit still for an hour while saying nonsensical phrases to a computer. (Kind of what I do for a living.)</p>
+<h3 id="what-do-you-need-1">What do you need?<a href="#what-do-you-need-1" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<ul>
+<li>This will be <em>VERY</em> Linux-based, so you will need Mac, Linux or WSL2 running on Windows.</li>
+<li>In my demonstration, I&rsquo;m showing you how to very quickly setup WSL2. (If you have no idea what WSL is but would like to know more&hellip;.check out this video &mdash;-&gt; <a href="https://youtu.be/vxTW22y8zV8?si=FpeB_ZiwrOweGZW">https://youtu.be/vxTW22y8zV8?si=FpeB_ZiwrOweGZW</a>_)</li>
+</ul>
+<h3 id="quick-wsl2-setup">Quick WSL2 Setup<a href="#quick-wsl2-setup" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>wsl --install Ubuntu-<span style="color:#ae81ff">22.04</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## Why Ubuntu 22.04? It was the most stable in my testing.</span>
+</span></span></code></pre></div><h3 id="get-some-things-setup">Get some things setup<a href="#get-some-things-setup" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<p>(Linux and WSL2)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">## Update repos</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sudo apt update
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## Clone the Piper Recording Studio repo from GitHub</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>git clone https://github.com/rhasspy/piper-recording-studio.git
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## Jump into the directory</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>cd piper-recording-studio
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## Create a Python Virtual Environment</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>python3 -m venv .venv
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## Activate that Python Virtual Environment</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>source .venv/bin/activate
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## Upgrade PIP</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>python3 -m pip install --upgrade pip
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## Install requirements for this project</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>python3 -m pip install -r requirements.txt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## Now RUN the Piper Recording Studio</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>python3 -m piper_recording_studio
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## Hit CTRL-C when you are done.</span>
+</span></span></code></pre></div><h3 id="record-some-stuff">Record some stuff<a href="#record-some-stuff" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<ul>
+<li>Navigate to http://localhost:8000 to access the Web Interface of the Piper Recording Studio and start recording your lovely voice.</li>
+</ul>
+<h3 id="prepare-the-stuff-you-recorded">Prepare the stuff you recorded<a href="#prepare-the-stuff-you-recorded" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">## Jump into the directory where your recordings live</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>cd output/en_US/nameofyourrecordingstuff.chat
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## Install ffmpeg</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sudo apt install ffmpeg
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## Jump back to the piper_recording_studo directory and export your data</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>cd ../../
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>python3 -m export_dataset ~/path/to/your/recorded/files ~/your/output/directory
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## Deactivate your virtual environment</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>deactivate
+</span></span></code></pre></div><h2 id="youtube-videos">YouTube Videos<a href="#youtube-videos" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<h3 id="download-youtube-videos">Download YouTube Videos<a href="#download-youtube-videos" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">## Make a new directory for this data prep and jump in there</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mkdir dataprep
+</span></span><span style="display:flex;"><span>cd dataprep
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## Create a new python virtual environment and activate it</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>python3 -m venv .venv
+</span></span><span style="display:flex;"><span>source .venv/bin/activate
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## Install YT-DLP to download YouTube Videos</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>pip install yt-dlp
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## Download the audio from a YouTube video</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>yt-dlp -x --audio-format wav <span style="color:#e6db74">&#34;youtube URL&#34;</span>
+</span></span></code></pre></div><h3 id="cleanup-your-audio-samples">Cleanup your audio samples<a href="#cleanup-your-audio-samples" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<ul>
+<li>Piper TTS will want audio samples between 5-15sec. Any larger and it will hate you.</li>
+</ul>
+<h4 id="use-audacity-to-trim-clipsetc">Use Audacity to trim clips..etc<a href="#use-audacity-to-trim-clipsetc" class="hanchor" ariaLabel="Anchor">#</a> </h4>
+<ul>
+<li>Audacity (free and open-source audio tool): <a href="https://www.audacityteam.org/">https://www.audacityteam.org/</a></li>
+<li>When exporting with Audacity (or any other program) Piper is wanting the audio in this format:
+<ul>
+<li>!<img alt="Image Description" src="/images/Pasted%20image%2020241119100549.png"></li>
+<li>Sample Rate: 22050 Hz</li>
+<li>Encoding: Signed 16-bit PCM</li>
+<li>Channels: mono</li>
+<li>Format: wav</li>
+</ul>
+</li>
+</ul>
+<h4 id="remove-silence">Remove Silence<a href="#remove-silence" class="hanchor" ariaLabel="Anchor">#</a> </h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#66d9ef">for</span> file in ./*.wav; <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>    ffmpeg -i <span style="color:#e6db74">&#34;</span>$file<span style="color:#e6db74">&#34;</span> -af <span style="color:#e6db74">&#34;silenceremove=stop_periods=-1:stop_duration=3:stop_threshold=-20dB&#34;</span> <span style="color:#e6db74">&#34;./</span><span style="color:#e6db74">${</span>file%.wav<span style="color:#e6db74">}</span><span style="color:#e6db74">_nosilence.wav&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">done</span>
+</span></span></code></pre></div><h4 id="cut-up-your-files">Cut up your files<a href="#cut-up-your-files" class="hanchor" ariaLabel="Anchor">#</a> </h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">## Create another directory</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mkdir wav
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## Cut it up </span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> file in *.wav; <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>  ffmpeg -i <span style="color:#e6db74">&#34;</span>$file<span style="color:#e6db74">&#34;</span> -f segment -segment_time <span style="color:#ae81ff">15</span> -c copy <span style="color:#e6db74">&#34;./wav/split_</span><span style="color:#e6db74">${</span>file%.*<span style="color:#e6db74">}</span><span style="color:#e6db74">_%03d.wav&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">done</span>
+</span></span></code></pre></div><h3 id="get-your-samples-ready-for-piper-tts">Get your samples ready for Piper TTS<a href="#get-your-samples-ready-for-piper-tts" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<h4 id="transcribe-your-audio-samples-with-whisper">Transcribe your audio samples with Whisper<a href="#transcribe-your-audio-samples-with-whisper" class="hanchor" ariaLabel="Anchor">#</a> </h4>
+<h5 id="install-whisper">Install Whisper<a href="#install-whisper" class="hanchor" ariaLabel="Anchor">#</a> </h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pip install git+https://github.com/openai/whisper.git
+</span></span></code></pre></div><h5 id="create-a-new-python-script-and-run-it">Create a new python script and run it<a href="#create-a-new-python-script-and-run-it" class="hanchor" ariaLabel="Anchor">#</a> </h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>nano whispersomethingtome.py
+</span></span></code></pre></div><p>Paste this script</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> os
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> whisper
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Initialize Whisper model (you can choose between &#39;tiny&#39;, &#39;base&#39;, &#39;small&#39;, &#39;medium&#39;, &#39;large&#39;)</span>
+</span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> whisper<span style="color:#f92672">.</span>load_model(<span style="color:#e6db74">&#34;base&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Path to the directory containing the audio files</span>
+</span></span><span style="display:flex;"><span>audio_dir <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;./wav&#34;</span>
+</span></span><span style="display:flex;"><span>output_csv <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;./metadata.csv&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># List all .wav files in the directory</span>
+</span></span><span style="display:flex;"><span>audio_files <span style="color:#f92672">=</span> [f <span style="color:#66d9ef">for</span> f <span style="color:#f92672">in</span> os<span style="color:#f92672">.</span>listdir(audio_dir) <span style="color:#66d9ef">if</span> f<span style="color:#f92672">.</span>endswith(<span style="color:#e6db74">&#34;.wav&#34;</span>)]
+</span></span><span style="display:flex;"><span>audio_files<span style="color:#f92672">.</span>sort()  <span style="color:#75715e"># Sort the files alphabetically (optional)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Open the CSV file for writing</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">with</span> open(output_csv, <span style="color:#e6db74">&#34;w&#34;</span>) <span style="color:#66d9ef">as</span> f:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> audio_file <span style="color:#f92672">in</span> audio_files:
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Full path to the audio file</span>
+</span></span><span style="display:flex;"><span>        audio_path <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>join(audio_dir, audio_file)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Transcribe the audio file</span>
+</span></span><span style="display:flex;"><span>        result <span style="color:#f92672">=</span> model<span style="color:#f92672">.</span>transcribe(audio_path)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Extract the transcription text</span>
+</span></span><span style="display:flex;"><span>        transcription <span style="color:#f92672">=</span> result[<span style="color:#e6db74">&#34;text&#34;</span>]<span style="color:#f92672">.</span>strip()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Write the filename (without .wav extension) and transcription to the CSV</span>
+</span></span><span style="display:flex;"><span>        file_id <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>splitext(audio_file)[<span style="color:#ae81ff">0</span>]  <span style="color:#75715e"># Get file name without extension</span>
+</span></span><span style="display:flex;"><span>        f<span style="color:#f92672">.</span>write(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">{</span>file_id<span style="color:#e6db74">}</span><span style="color:#e6db74">|</span><span style="color:#e6db74">{</span>transcription<span style="color:#e6db74">}</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Transcriptions complete! Metadata saved to </span><span style="color:#e6db74">{</span>output_csv<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span></code></pre></div><p>Run the script</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>python3 whispersomethingtome.py
+</span></span></code></pre></div><p>Clean it up</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">## Deactivate your python virtual environment</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>deactivate
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## Go back home</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>cd ~/
+</span></span></code></pre></div><h2 id="prepare-to-train-piper-recording-studio-and-youtube">Prepare to Train (Piper Recording Studio and YouTube)<a href="#prepare-to-train-piper-recording-studio-and-youtube" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<h3 id="prep-your-training-environment">Prep Your Training Environment<a href="#prep-your-training-environment" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">## Make a new directory for training</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mkdir training
+</span></span><span style="display:flex;"><span>cd training
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## Clone the Piper Repo</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>git clone https://github.com/rhasspy/piper.git
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## Create another python virtual environment and activate it</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>python3 -m venv .venv
+</span></span><span style="display:flex;"><span>source .venv/bin/activate
+</span></span></code></pre></div><h4 id="solving-your-headaches">Solving your headaches<a href="#solving-your-headaches" class="hanchor" ariaLabel="Anchor">#</a> </h4>
+<p><em>Because Piper TTS is picky</em></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">## Install a VERY specific version of PIP</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>python3 -m pip install pip<span style="color:#f92672">==</span>23.3.1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## Install a VERY specific version of numpy</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>pip install numpy<span style="color:#f92672">==</span>1.24.4
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## Install a VERY specific version of torchmetrics</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>pip install torchmetrics<span style="color:#f92672">==</span>0.11.4
+</span></span></code></pre></div><h4 id="more-prep">More prep<a href="#more-prep" class="hanchor" ariaLabel="Anchor">#</a> </h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">## Jump into the Piper directory</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>cd piper/src/python
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## If you have a 4090...this will save you ---&gt; https://github.com/rhasspy/piper/issues/295</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## Setup wheel</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>python3 -m pip install --upgrade wheel setuptools
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## Install requirements</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>pip3 install -e .
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## Run this script (I don&#39;t know what it does...but piper needs it)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>./build_monotonic_align.sh
+</span></span></code></pre></div><h3 id="make-piper-love-your-data">Make Piper LOVE your data<a href="#make-piper-love-your-data" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">## This will process your dataset, getting it ready for Piper to train</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>python3 -m piper_train.preprocess <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --language en <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --input-dir ~/your_training_data_directory/ <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --output-dir ~/your_output_directory <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --dataset-format ljspeech <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --single-speaker <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --sample-rate <span style="color:#ae81ff">22050</span>
+</span></span></code></pre></div><h3 id="download-a-starting-point">Download a starting point<a href="#download-a-starting-point" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<ul>
+<li>You DON&rsquo;T want to start training from scratch. We will download a pre-trained model that already has a headstart.</li>
+<li>Download High, Medium, or Low&hellip;depending on what you want &mdash;&gt; <a href="https://huggingface.co/datasets/rhasspy/piper-checkpoints/tree/main/en/en_US/lessac">https://huggingface.co/datasets/rhasspy/piper-checkpoints/tree/main/en/en_US/lessac</a></li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">## Downloading the Lessac (medium) checkpoint</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>wget https://huggingface.co/datasets/rhasspy/piper-checkpoints/resolve/main/en/en_US/lessac/medium/epoch%3D2164-step%3D1355540.ckpt
+</span></span></code></pre></div><h1 id="step-2---time-to-train">Step 2 - Time to TRAIN!!!<a href="#step-2---time-to-train" class="hanchor" ariaLabel="Anchor">#</a> </h1>
+<ul>
+<li>Picking up from step 1, we are going to copy and paste this command.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>python3 -m piper_train <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --dataset-dir ~/your_training_data_directory <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --accelerator <span style="color:#e6db74">&#39;gpu&#39;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --gpus <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --batch-size <span style="color:#ae81ff">32</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --validation-split 0.0 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --num-test-examples <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --max_epochs <span style="color:#ae81ff">6000</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --resume_from_checkpoint <span style="color:#e6db74">&#34;/place/where/you/downloaded/thecheckpoint/epoch=2218-step=838782.ckpt&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --checkpoint-epochs <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --precision <span style="color:#ae81ff">16</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --max-phoneme-ids <span style="color:#ae81ff">400</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --quality medium 
+</span></span></code></pre></div><ul>
+<li>If you have DUAL GPUs, this script has a few fun things</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>python3 -m piper_train <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --dataset-dir ~/new_chuck/train-me <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --accelerator <span style="color:#e6db74">&#39;gpu&#39;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --gpus <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --batch-size <span style="color:#ae81ff">32</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --validation-split 0.0 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --num-test-examples <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --max_epochs <span style="color:#ae81ff">6000</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --resume_from_checkpoint <span style="color:#e6db74">&#34;/home/networkchuck/piper_project/base_checkpoints/high/epoch=2218-step=838782.ckpt&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --checkpoint-epochs <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --precision <span style="color:#ae81ff">16</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --max-phoneme-ids <span style="color:#ae81ff">400</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --quality high <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --strategy ddp
+</span></span></code></pre></div><h2 id="stoping-and-resuming">Stoping and Resuming<a href="#stoping-and-resuming" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<ul>
+<li>You can interrupt training and pickup where you left off.</li>
+<li>Just hit ctrl-c</li>
+<li>When you are ready to resume training, run the same command but change the checkpoint file to YOUR most recent checkpoint file. You would have seen this in the output of your training process.</li>
+</ul>
+<p>!<img alt="Image Description" src="/images/Pasted%20image%2020241119103618.png"></p>
+<h2 id="when-your-final-epoch-is-reached">When your final epoch is reached<a href="#when-your-final-epoch-is-reached" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<ul>
+<li>It&rsquo;s time to export your voice when training is done. Also know that you can export your voice at ANY point in training by simply targeting the most recent checkpoint file.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">## Export the model</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>python3 -m piper_train.export_onnx <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    <span style="color:#e6db74">&#34;/path/to/your/checkpoint/checkpoints/epoch=5999-step=853906.ckpt&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    ~/output/directory/voicename.onnx
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## Copy the training json file to your model file directory</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>cp ~/training_directory/config.json ~/output/directory/voicename.onnx.json
+</span></span></code></pre></div><h2 id="lets-test">Let&rsquo;s test<a href="#lets-test" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">## Make sure you have Piper TTS installed</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>pip install piper-tts
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## Test your voice</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;Subscribe to NetworkChuck&#34;</span> | piper -m voicename.onnx --output_file test.wav
+</span></span></code></pre></div>
+      </div></div>
+
+  
+    
+<div class="pagination">
+  <div class="pagination__title">
+    <span class="pagination__title-h">Read other posts</span>
+    <hr />
+  </div>
+  <div class="pagination__buttons">
+    
+    
+    
+      <a href="/posts/a-new-post/" class="button inline next">
+        Just a test
+      </a>
+    
+  </div>
+</div>
+
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2024 Powered by <a href="https://gohugo.io">Hugo</a></span>
+    
+      <span>:: <a href="https://github.com/panr/hugo-theme-terminal" target="_blank">Theme</a> made by <a href="https://github.com/panr" target="_blank">panr</a></span>
+      </div>
+  </div>
+</footer>
+
+
+
+
+
+
+<script type="text/javascript" src="/bundle.min.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>
