@@ -4,6 +4,7 @@ languageCode = "en-us"
 # Remove it if you use the theme as a remote Hugo Module.
 theme = "terminal"
 paginate = 5
+baseURL = "https://blog.networkchuck.com/"
 
 [params]
   # dir name of your main content (default is `content/posts`).
