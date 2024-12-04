@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>Creating a Solana Token :: Terminal</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="What Do You Need? A computer&hellip;and a terminal Mac, Windows, Linux&hellip;it doesn&rsquo;t matter. On Windows, we will be using WSL2&hellip;what is that? Check it out here &mdash;-&gt; https://youtu.be/vxTW22y8zV8?si=qzu9YrxSFFnXwSLM !
+Docker Docker is my favorite way to deploy pretty much anything. It&rsquo;s available on all platforms and very easy to install. Mac - Docker Install Link: https://docs.docker.com/desktop/setup/install/mac-install/ Linux/Windows (WSL) - Docker Install https://docs.docker.com/engine/install/ (link for all other distros) If you are using Ubuntu (primary OS or WSL), do this: here is the link to documentation: https://docs.docker.com/engine/install/ubuntu/ Setup Docker&rsquo;s apt repo # Add Docker&#39;s official GPG key: sudo apt-get update sudo apt-get install ca-certificates curl sudo install -m 0755 -d /etc/apt/keyrings sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc sudo chmod a&#43;r /etc/apt/keyrings/docker.asc # Add the repository to Apt sources: echo \ &#34;deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \ $(. /etc/os-release &amp;&amp; echo &#34;$VERSION_CODENAME&#34;) stable&#34; | \ sudo tee /etc/apt/sources.list.d/docker.list &gt; /dev/null sudo apt-get update Install the latest Docker version sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin Make sure it works sudo docker run hello-world Setup the Solana Docker Container Create a new folder for your token project mkdir your-token-name ## jump in there cd your-token-name Create a Dockerfile This will walk you through how to create a Dockerfile, a file that will help you create your own Docker image. ## Use nano to create a file nano Dockerfile ## Copy and paste the Dockerfile code below. Use ctrl-x-enter to save. Dockerfile # Use a lightweight base image FROM debian:bullseye-slim # Set non-interactive frontend for apt ENV DEBIAN_FRONTEND=noninteractive # Install required dependencies and Rust RUN apt-get update &amp;&amp; apt-get install -y \ curl build-essential libssl-dev pkg-config nano \ &amp;&amp; curl --proto &#39;=https&#39; --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y \ &amp;&amp; apt-get clean &amp;&amp; rm -rf /var/lib/apt/lists/* # Add Rust to PATH ENV PATH=&#34;/root/.cargo/bin:$PATH&#34; # Verify Rust installation RUN rustc --version # Install Solana CLI RUN curl -sSfL https://release.anza.xyz/stable/install | sh \ &amp;&amp; echo &#39;export PATH=&#34;$HOME/.local/share/solana/install/active_release/bin:$PATH&#34;&#39; &gt;&gt; ~/.bashrc # Add Solana CLI to PATH ENV PATH=&#34;/root/.local/share/solana/install/active_release/bin:$PATH&#34; # Verify Solana CLI installation RUN solana --version # Set up Solana config for Devnet RUN solana config set -ud # Set working directory WORKDIR /solana-token # Default command to run a shell CMD [&#34;/bin/bash&#34;] Build the Docker Image We&rsquo;re building our Docker image now with the Dockerfile we just created. We&rsquo;re naming the image heysolana docker build -t heysolana . Run the Container Now we are creating a docker container with this image (and running it). Using the -it switch will throw us right into the container. The -v options are mapping our current directory inside the docker container so that all the work we do will be saved. We are naming the Docker container heysolana docker run -it --rm -v $(pwd):/solana-token -v $(pwd)/solana-data:/root/.config/solana heysolana Create a fake Solana Token We&rsquo;re creating a token on the Solana devnet. Why? We can brake stuff, it&rsquo;s free, and this might be where you will stop. You can do everything the mainnet can do, it is just considered a testing environment and you can&rsquo;t buy or sell tokens here. BUT&hellip;you can send and receive tokens. So, if that&rsquo;s all you care about, this is where you can leave off. Create an account for mint authority This will be the account that will own the token we&rsquo;re creating. This is also a Solana wallet. You can send and receive Solana tokens with this wallet, or account. Here we are creating an account that will start with dad because it&rsquo;s the daddy of our new token, the boss. solana-keygen grind --starts-with dad:1 Set the account as the default keypair With this command we are telling the Solana CLI to use this new account we just created as the default account for whatever we are doing. solana config set --keypair dad-your-token-acount.json Change to devnet With this command we are changing to the Solana devnet for this token. solana config set --url devnet Verify your config This will output your current Solana CLI config solana config get !
+" />
+<meta name="keywords" content="" />
+
+  <meta name="robots" content="noodp" />
+
+<link rel="canonical" href="/posts/create-a-solana-token/" />
+
+
+
+
+
+  
+  <link rel="stylesheet" href="/css/buttons.min.2bc533403a27dfe0e93105a92502b42ce4587e2e4a87d9f7d349e51e16e09478.css">
+
+  
+  <link rel="stylesheet" href="/css/code.min.00125962708925857e7b66dbc58391d55be1191a3d0ce2034de8c9cd2c481c36.css">
+
+  
+  <link rel="stylesheet" href="/css/fonts.min.4881f0c525f3ce2a1864fb6e96676396cebe1e6fcef1933e8e1dde7041004fb5.css">
+
+  
+  <link rel="stylesheet" href="/css/footer.min.2e3eb191baee58dd05a9f0104ac1fab0827bca7c64dafe0b2579f934c33a1d69.css">
+
+  
+  <link rel="stylesheet" href="/css/gist.min.a751e8b0abe1ba8bc53ced52a38b19d8950fe78ca29454ea8c2595cf26aad5c0.css">
+
+  
+  <link rel="stylesheet" href="/css/header.min.b6fb4423cf82a9f9d7abc9cd010223fa3d70a6526a3f28f8e17d814c06e18f9e.css">
+
+  
+  <link rel="stylesheet" href="/css/main.min.fe8dc560fccb53a458b0db19ccb7b265764ac46b68596b7e099c6793054dd457.css">
+
+  
+  <link rel="stylesheet" href="/css/menu.min.83637a90d903026bc280d3f82f96ceb06c5fc72b7c1a8d686afb5bbf818a29f7.css">
+
+  
+  <link rel="stylesheet" href="/css/pagination.min.82f6400eae7c7c6dc3c866733c2ec0579e4089608fea69400ff85b3880aa0d3c.css">
+
+  
+  <link rel="stylesheet" href="/css/post.min.fc74ca360273c1d828da3c02b8174eba435607b369d98418ccc6f2243cd4e75d.css">
+
+  
+  <link rel="stylesheet" href="/css/prism.min.9023bbc24533d09e97a51a0a42a5a7bfe4c591ae167c5551fb1d2191d11977c0.css">
+
+  
+  <link rel="stylesheet" href="/css/syntax.min.cc789ed9377260d7949ea4c18781fc58959a89287210fe4edbff44ebfc1511b6.css">
+
+  
+  <link rel="stylesheet" href="/css/terminal.min.dd0bf9c7cacb24c1b0184f52f1869b274e06689557468cc7030ccf632328eb97.css">
+
+  
+  <link rel="stylesheet" href="/css/terms.min.b81791663c3790e738e571cdbf802312390d30e4b1d8dc9d814a5b5454d0ac11.css">
+
+
+
+
+
+
+
+<link rel="shortcut icon" href="/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+
+<meta name="twitter:card" content="summary" />
+
+  
+    <meta name="twitter:site" content="" />
+  
+    <meta name="twitter:creator" content="" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Creating a Solana Token">
+<meta property="og:description" content="What Do You Need? A computer&hellip;and a terminal Mac, Windows, Linux&hellip;it doesn&rsquo;t matter. On Windows, we will be using WSL2&hellip;what is that? Check it out here &mdash;-&gt; https://youtu.be/vxTW22y8zV8?si=qzu9YrxSFFnXwSLM !
+Docker Docker is my favorite way to deploy pretty much anything. It&rsquo;s available on all platforms and very easy to install. Mac - Docker Install Link: https://docs.docker.com/desktop/setup/install/mac-install/ Linux/Windows (WSL) - Docker Install https://docs.docker.com/engine/install/ (link for all other distros) If you are using Ubuntu (primary OS or WSL), do this: here is the link to documentation: https://docs.docker.com/engine/install/ubuntu/ Setup Docker&rsquo;s apt repo # Add Docker&#39;s official GPG key: sudo apt-get update sudo apt-get install ca-certificates curl sudo install -m 0755 -d /etc/apt/keyrings sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc sudo chmod a&#43;r /etc/apt/keyrings/docker.asc # Add the repository to Apt sources: echo \ &#34;deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \ $(. /etc/os-release &amp;&amp; echo &#34;$VERSION_CODENAME&#34;) stable&#34; | \ sudo tee /etc/apt/sources.list.d/docker.list &gt; /dev/null sudo apt-get update Install the latest Docker version sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin Make sure it works sudo docker run hello-world Setup the Solana Docker Container Create a new folder for your token project mkdir your-token-name ## jump in there cd your-token-name Create a Dockerfile This will walk you through how to create a Dockerfile, a file that will help you create your own Docker image. ## Use nano to create a file nano Dockerfile ## Copy and paste the Dockerfile code below. Use ctrl-x-enter to save. Dockerfile # Use a lightweight base image FROM debian:bullseye-slim # Set non-interactive frontend for apt ENV DEBIAN_FRONTEND=noninteractive # Install required dependencies and Rust RUN apt-get update &amp;&amp; apt-get install -y \ curl build-essential libssl-dev pkg-config nano \ &amp;&amp; curl --proto &#39;=https&#39; --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y \ &amp;&amp; apt-get clean &amp;&amp; rm -rf /var/lib/apt/lists/* # Add Rust to PATH ENV PATH=&#34;/root/.cargo/bin:$PATH&#34; # Verify Rust installation RUN rustc --version # Install Solana CLI RUN curl -sSfL https://release.anza.xyz/stable/install | sh \ &amp;&amp; echo &#39;export PATH=&#34;$HOME/.local/share/solana/install/active_release/bin:$PATH&#34;&#39; &gt;&gt; ~/.bashrc # Add Solana CLI to PATH ENV PATH=&#34;/root/.local/share/solana/install/active_release/bin:$PATH&#34; # Verify Solana CLI installation RUN solana --version # Set up Solana config for Devnet RUN solana config set -ud # Set working directory WORKDIR /solana-token # Default command to run a shell CMD [&#34;/bin/bash&#34;] Build the Docker Image We&rsquo;re building our Docker image now with the Dockerfile we just created. We&rsquo;re naming the image heysolana docker build -t heysolana . Run the Container Now we are creating a docker container with this image (and running it). Using the -it switch will throw us right into the container. The -v options are mapping our current directory inside the docker container so that all the work we do will be saved. We are naming the Docker container heysolana docker run -it --rm -v $(pwd):/solana-token -v $(pwd)/solana-data:/root/.config/solana heysolana Create a fake Solana Token We&rsquo;re creating a token on the Solana devnet. Why? We can brake stuff, it&rsquo;s free, and this might be where you will stop. You can do everything the mainnet can do, it is just considered a testing environment and you can&rsquo;t buy or sell tokens here. BUT&hellip;you can send and receive tokens. So, if that&rsquo;s all you care about, this is where you can leave off. Create an account for mint authority This will be the account that will own the token we&rsquo;re creating. This is also a Solana wallet. You can send and receive Solana tokens with this wallet, or account. Here we are creating an account that will start with dad because it&rsquo;s the daddy of our new token, the boss. solana-keygen grind --starts-with dad:1 Set the account as the default keypair With this command we are telling the Solana CLI to use this new account we just created as the default account for whatever we are doing. solana config set --keypair dad-your-token-acount.json Change to devnet With this command we are changing to the Solana devnet for this token. solana config set --url devnet Verify your config This will output your current Solana CLI config solana config get !
+" />
+<meta property="og:url" content="/posts/create-a-solana-token/" />
+<meta property="og:site_name" content="Terminal" />
+
+  <meta property="og:image" content="/og-image.png">
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+
+  <meta property="article:published_time" content="2024-12-04 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+
+
+<div class="container">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    Terminal
+  </div>
+</a>
+
+    </div>
+    
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/showcase">Showcase</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
+    
+  </div>
+  
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
+    
+      
+        
+          <li><a href="/about" >About</a></li>
+        
+      
+        
+          <li><a href="/showcase" >Showcase</a></li>
+        
+      
+      
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="/posts/create-a-solana-token/">Creating a Solana Token</a>
+  </h1>
+  <div class="post-meta"><time class="post-date">2024-12-04</time></div>
+
+  
+    <span class="post-tags">
+      
+      #<a href="/tags/networkchuck/">NetworkChuck</a>&nbsp;
+      
+    </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <h1 id="what-do-you-need">What Do You Need?<a href="#what-do-you-need" class="hanchor" ariaLabel="Anchor">#</a> </h1>
+<h2 id="a-computerand-a-terminal">A computer&hellip;and a terminal<a href="#a-computerand-a-terminal" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<ul>
+<li>Mac, Windows, Linux&hellip;it doesn&rsquo;t matter.
+<ul>
+<li><em>On Windows, we will be using WSL2&hellip;what is that? Check it out here &mdash;-&gt; <a href="https://youtu.be/vxTW22y8zV8?si=qzu9YrxSFFnXwSLM">https://youtu.be/vxTW22y8zV8?si=qzu9YrxSFFnXwSLM</a></em></li>
+</ul>
+</li>
+</ul>
+<p>!<img alt="Image Description" src="/images/Pasted%20image%2020241204104328.png"></p>
+<h2 id="docker">Docker<a href="#docker" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<ul>
+<li>Docker is my favorite way to deploy pretty much anything. It&rsquo;s available on all platforms and very easy to install.</li>
+</ul>
+<h3 id="mac---docker-install">Mac - Docker Install<a href="#mac---docker-install" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<ul>
+<li>Link: <a href="https://docs.docker.com/desktop/setup/install/mac-install/">https://docs.docker.com/desktop/setup/install/mac-install/</a></li>
+</ul>
+<h3 id="linuxwindows-wsl---docker-install">Linux/Windows (WSL) - Docker Install<a href="#linuxwindows-wsl---docker-install" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<ul>
+<li><a href="https://docs.docker.com/engine/install/">https://docs.docker.com/engine/install/</a> (link for all other distros)</li>
+<li>If you are using Ubuntu (primary OS or WSL), do this:
+<ul>
+<li>here is the link to documentation: <a href="https://docs.docker.com/engine/install/ubuntu/">https://docs.docker.com/engine/install/ubuntu/</a></li>
+</ul>
+</li>
+</ul>
+<h4 id="setup-dockers-apt-repo">Setup Docker&rsquo;s apt repo<a href="#setup-dockers-apt-repo" class="hanchor" ariaLabel="Anchor">#</a> </h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Add Docker&#39;s official GPG key:</span>
+</span></span><span style="display:flex;"><span>sudo apt-get update
+</span></span><span style="display:flex;"><span>sudo apt-get install ca-certificates curl
+</span></span><span style="display:flex;"><span>sudo install -m <span style="color:#ae81ff">0755</span> -d /etc/apt/keyrings
+</span></span><span style="display:flex;"><span>sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+</span></span><span style="display:flex;"><span>sudo chmod a+r /etc/apt/keyrings/docker.asc
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Add the repository to Apt sources:</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  <span style="color:#e6db74">&#34;deb [arch=</span><span style="color:#66d9ef">$(</span>dpkg --print-architecture<span style="color:#66d9ef">)</span><span style="color:#e6db74"> signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  </span><span style="color:#66d9ef">$(</span>. /etc/os-release <span style="color:#f92672">&amp;&amp;</span> echo <span style="color:#e6db74">&#34;</span>$VERSION_CODENAME<span style="color:#e6db74">&#34;</span><span style="color:#66d9ef">)</span><span style="color:#e6db74"> stable&#34;</span> | <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  sudo tee /etc/apt/sources.list.d/docker.list &gt; /dev/null
+</span></span><span style="display:flex;"><span>sudo apt-get update
+</span></span></code></pre></div><h4 id="install-the-latest-docker-version">Install the latest Docker version<a href="#install-the-latest-docker-version" class="hanchor" ariaLabel="Anchor">#</a> </h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+</span></span></code></pre></div><h4 id="make-sure-it-works">Make sure it works<a href="#make-sure-it-works" class="hanchor" ariaLabel="Anchor">#</a> </h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo docker run hello-world
+</span></span></code></pre></div><h1 id="setup-the-solana-docker-container">Setup the Solana Docker Container<a href="#setup-the-solana-docker-container" class="hanchor" ariaLabel="Anchor">#</a> </h1>
+<h2 id="create-a-new-folder-for-your-token-project">Create a new folder for your token project<a href="#create-a-new-folder-for-your-token-project" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mkdir your-token-name
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## jump in there</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>cd  your-token-name
+</span></span></code></pre></div><h2 id="create-a-dockerfile">Create a Dockerfile<a href="#create-a-dockerfile" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<ul>
+<li>This will walk you through how to create a Dockerfile, a file that will help you create your own Docker image.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">## Use nano to create a file</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>nano Dockerfile
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## Copy and paste the Dockerfile code below. Use ctrl-x-enter to save.</span>
+</span></span></code></pre></div><h3 id="dockerfile">Dockerfile<a href="#dockerfile" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Use a lightweight base image</span>
+</span></span><span style="display:flex;"><span>FROM debian:bullseye-slim
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Set non-interactive frontend for apt</span>
+</span></span><span style="display:flex;"><span>ENV DEBIAN_FRONTEND<span style="color:#f92672">=</span>noninteractive
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Install required dependencies and Rust</span>
+</span></span><span style="display:flex;"><span>RUN apt-get update <span style="color:#f92672">&amp;&amp;</span> apt-get install -y <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    curl build-essential libssl-dev pkg-config nano <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    <span style="color:#f92672">&amp;&amp;</span> curl --proto <span style="color:#e6db74">&#39;=https&#39;</span> --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    <span style="color:#f92672">&amp;&amp;</span> apt-get clean <span style="color:#f92672">&amp;&amp;</span> rm -rf /var/lib/apt/lists/*
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Add Rust to PATH</span>
+</span></span><span style="display:flex;"><span>ENV PATH<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/root/.cargo/bin:</span>$PATH<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Verify Rust installation</span>
+</span></span><span style="display:flex;"><span>RUN rustc --version
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Install Solana CLI</span>
+</span></span><span style="display:flex;"><span>RUN curl -sSfL https://release.anza.xyz/stable/install | sh <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    <span style="color:#f92672">&amp;&amp;</span> echo <span style="color:#e6db74">&#39;export PATH=&#34;$HOME/.local/share/solana/install/active_release/bin:$PATH&#34;&#39;</span> &gt;&gt; ~/.bashrc
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Add Solana CLI to PATH</span>
+</span></span><span style="display:flex;"><span>ENV PATH<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/root/.local/share/solana/install/active_release/bin:</span>$PATH<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Verify Solana CLI installation</span>
+</span></span><span style="display:flex;"><span>RUN solana --version
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Set up Solana config for Devnet</span>
+</span></span><span style="display:flex;"><span>RUN solana config set -ud
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Set working directory</span>
+</span></span><span style="display:flex;"><span>WORKDIR /solana-token
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Default command to run a shell</span>
+</span></span><span style="display:flex;"><span>CMD <span style="color:#f92672">[</span><span style="color:#e6db74">&#34;/bin/bash&#34;</span><span style="color:#f92672">]</span>
+</span></span></code></pre></div><h2 id="build-the-docker-image">Build the Docker Image<a href="#build-the-docker-image" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<ul>
+<li>We&rsquo;re building our Docker image now with the Dockerfile we just created. We&rsquo;re naming the image <em>heysolana</em></li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker build -t heysolana .
+</span></span></code></pre></div><h2 id="run-the-container">Run the Container<a href="#run-the-container" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<ul>
+<li>Now we are creating a docker container with this image (and running it). Using the <em>-it</em> switch will throw us right into the container.</li>
+<li>The <em>-v</em> options are mapping our current directory inside the docker container so that all the work we do will be saved.</li>
+<li>We are naming the Docker container <em>heysolana</em></li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker run -it --rm -v <span style="color:#66d9ef">$(</span>pwd<span style="color:#66d9ef">)</span>:/solana-token -v <span style="color:#66d9ef">$(</span>pwd<span style="color:#66d9ef">)</span>/solana-data:/root/.config/solana heysolana
+</span></span></code></pre></div><h1 id="create-a-fake-solana-token">Create a <em>fake</em> Solana Token<a href="#create-a-fake-solana-token" class="hanchor" ariaLabel="Anchor">#</a> </h1>
+<ul>
+<li>We&rsquo;re creating a token on the Solana <em>devnet</em>.</li>
+<li>Why?</li>
+<li>We can brake stuff, it&rsquo;s free, and this might be where you will stop. You can do everything the <em>mainnet</em> can do, it is just considered a testing environment and you can&rsquo;t buy or sell tokens here. BUT&hellip;you can send and receive tokens. So, if that&rsquo;s all you care about, this is where you can leave off.</li>
+</ul>
+<h2 id="create-an-account-for-mint-authority">Create an account for <em>mint authority</em><a href="#create-an-account-for-mint-authority" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<ul>
+<li>This will be the account that will <em>own</em> the token we&rsquo;re creating.</li>
+<li>This is also a Solana wallet. You can send and receive Solana tokens with this wallet, or account.</li>
+<li>Here we are creating an account that will start with <em>dad</em> because it&rsquo;s the daddy of our new token, the boss.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>solana-keygen grind --starts-with dad:1
+</span></span></code></pre></div><h2 id="set-the-account-as-the-default-keypair">Set the account as the default keypair<a href="#set-the-account-as-the-default-keypair" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<ul>
+<li>With this command we are telling the Solana CLI to use this new account we just created as the default account for whatever we are doing.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>solana config set --keypair dad-your-token-acount.json
+</span></span></code></pre></div><h2 id="change-to-devnet">Change to devnet<a href="#change-to-devnet" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<ul>
+<li>With this command we are changing to the Solana <em>devnet</em> for this token.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>solana config set --url devnet
+</span></span></code></pre></div><h2 id="verify-your-config">Verify your config<a href="#verify-your-config" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<ul>
+<li>This will output your current Solana CLI config</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>solana config get
+</span></span></code></pre></div><p>!<img alt="Image Description" src="/images/Pasted%20image%2020241204111256.png"></p>
+<h2 id="get-some-sol-from-a-faucet">Get some SOL from a faucet<a href="#get-some-sol-from-a-faucet" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<ul>
+<li>In order to mint new tokens, send tokens&hellip;etc..on the Solana network, you&rsquo;ll need SOL to power it.</li>
+<li>On the <em>mainnet</em> you would need to buy actual SOL but on the <em>devnet</em>, you can just wish for it and a magic genie gives you some.</li>
+<li>Go out to this URL <a href="https://faucet.solana.com/">https://faucet.solana.com/</a> to have SOL <em>airdropped</em> to the account you just created. What&rsquo;s your account address?</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">## Run this to find your solana address</span>
+</span></span><span style="display:flex;"><span>solana address
+</span></span></code></pre></div><ul>
+<li>Paste your solana address in the field and enter an amount of SOL you want. 2.5 will be MORE than enough.</li>
+</ul>
+<p>!<img alt="Image Description" src="/images/Pasted%20image%2020241204111340.png"></p>
+<ul>
+<li>If you see this message, you are solid.</li>
+</ul>
+<p>!<img alt="Image Description" src="/images/Pasted%20image%2020241204111402.png"></p>
+<ul>
+<li>Check your solana balance to make sure it arrived okay.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>solana balance
+</span></span></code></pre></div><p>!<img alt="Image Description" src="/images/Pasted%20image%2020241204111540.png"></p>
+<h2 id="create-a-mint-address">Create a mint address<a href="#create-a-mint-address" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<ul>
+<li>Yes, we are creating another account.</li>
+<li>This will be your <em>mint address</em>, the factory that will make your token.</li>
+<li>It will also be the official address of your token and how you will always know it&rsquo;s the right token.</li>
+<li>We&rsquo;re going to create it starting with <em>mnt</em> so we know it&rsquo;s our mint address.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>solana-keygen grind --starts-with mnt:1
+</span></span></code></pre></div><h2 id="now-lets-mint-our-token">Now, let&rsquo;s mint our TOKEN!!!!<a href="#now-lets-mint-our-token" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<ul>
+<li>This is using the default token program from Solana with the <em>&ndash;progam-id</em> switch</li>
+<li>We&rsquo;re enabling metadata with <em>&ndash;enable-metadata</em>, you know, pictures and stuff</li>
+<li>Decimals? With the <em>&ndash;decimals</em> switch, we are defining how many decimal places our token can have. It specifies how many fractional units a token can have. 9 is what SOL uses&hellip;so it should be good enough for us.</li>
+<li>Make sure to include your own mint address below.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>spl-token create-token <span style="color:#ae81ff">\ </span>
+</span></span><span style="display:flex;"><span>--program-id TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>--enable-metadata <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>--decimals <span style="color:#ae81ff">9</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>mnt-your-mint-address.json
+</span></span></code></pre></div><ul>
+<li>You&rsquo;ll see an output like this</li>
+<li>I would screenshot or copy and paste this, keep it somewhere safe.</li>
+</ul>
+<p>!<img alt="Image Description" src="/images/Pasted%20image%2020241204112417.png"></p>
+<ul>
+<li>Notice that my token address is the same as my mint address</li>
+</ul>
+<h2 id="upload-metadata">Upload Metadata<a href="#upload-metadata" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<ul>
+<li>Now, we are going to upload the <em>metadata</em> of our token, things like the name, symbol and the icon.</li>
+<li>Let&rsquo;s start with our token icon. Make sure it is:
+<ul>
+<li>Square</li>
+<li>either 512x512 or 1024x1024</li>
+<li>less than <em>100kb</em></li>
+</ul>
+</li>
+</ul>
+<p>!<img alt="Image Description" src="/images/Pasted%20image%2020241204113404.png"></p>
+<h3 id="upload-image-to-some-sort-of-online-storage">Upload Image to some sort of online storage<a href="#upload-image-to-some-sort-of-online-storage" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<ul>
+<li>
+<p>Since we are doing decentralized things, it would be nice to store our stuff on decentralized storage. I tried Pinata and I like it.</p>
+<ul>
+<li>&mdash;&gt; <a href="https://app.pinata.cloud/">https://app.pinata.cloud/</a></li>
+<li>Create an account and upload your image</li>
+</ul>
+</li>
+<li>
+<p>Go to <em>IPFS Files</em></p>
+</li>
+</ul>
+<p>![[Pasted image 20241204113809.png|300]]</p>
+<ul>
+<li>
+<p>Upload your file
+!<img alt="Image Description" src="/images/Pasted%20image%2020241204113836.png"></p>
+</li>
+<li>
+<p>Open your file and copy the URL. It should look something like this. Put it somewhere, we&rsquo;re about to use it.</p>
+</li>
+</ul>
+<p><code>https://salmon-effective-mosquito-301.mypinata.cloud/ipfs/bafkreigaiqsulww3fulikwx5ho2ifpfqfnco5bhqs4ui5gk5rn4ggkjuoy</code></p>
+<h2 id="create-metadata-file">Create Metadata file<a href="#create-metadata-file" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<ul>
+<li>Create a file with this format, filling in your details.</li>
+<li>Name can be anything  you want</li>
+<li>Symbol is the short version, like a stock symbol.</li>
+<li>The <em>image</em> will be the url we just copied from our image upload process. If you don&rsquo;t have one, feel free to use mine.</li>
+</ul>
+<h3 id="save-this-as-a-json-file">Save this as a json file<a href="#save-this-as-a-json-file" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">## Create the file</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>nano metadata.json
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## Copy and paste the metadata stuff</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Beard Coin&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;symbol&#34;</span>: <span style="color:#e6db74">&#34;BEARD&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;description&#34;</span>: <span style="color:#e6db74">&#34;Just a cool little coin, just for me.&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;image&#34;</span>: <span style="color:#e6db74">&#34;https://salmon-effective-mosquito-301.mypinata.cloud/ipfs/bafkreigaiqsulww3fulikwx5ho2ifpfqfnco5bhqs4ui5gk5rn4ggkjuoy&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="upload-this-metadata-file-to-pinata">Upload this metadata file to Pinata<a href="#upload-this-metadata-file-to-pinata" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<ul>
+<li>Same steps as before. Upload to Pinata and copy the url.</li>
+</ul>
+<p>!<img alt="Image Description" src="/images/Pasted%20image%2020241204114840.png"></p>
+<h2 id="add-the-metadata-to-the-token">Add the metadata to the token<a href="#add-the-metadata-to-the-token" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<ul>
+<li>Now, time to upload our metadata. This will actually go on chain&hellip;.which is pretty off the chain&hellip;..</li>
+<li>Notice our token address is given without the <em>.json</em></li>
+<li>Then we specify our coin name</li>
+<li>And then our symbol. I know, this is probably redundant&hellip;but we&rsquo;re making sure the job gets done.</li>
+<li>And finally, the url to our metadata.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>spl-token initialize-metadata <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>mnteyhFCjqLu5QwfXmEu49dGybyFN5dwPfAhoiMbjNw <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span><span style="color:#e6db74">&#34;Beard Coin&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span><span style="color:#e6db74">&#34;BEARD&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>https://salmon-effective-mosquito-301.mypinata.cloud/ipfs/bafkreiamyf4f4iijqd2rp7phlqcdt4xoml2nfpeubavfyvwmi2vxpywawe
+</span></span></code></pre></div><ul>
+<li>You&rsquo;ll see something like this</li>
+</ul>
+<p>!<img alt="Image Description" src="/images/Pasted%20image%2020241204115513.png"></p>
+<h2 id="lets-take-a-look">Let&rsquo;s take a look!<a href="#lets-take-a-look" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<ul>
+<li>Go out to Solana Explorer (<a href="https://explorer.solana.com/)">https://explorer.solana.com/)</a>, select the devnet as your <em>cluster</em></li>
+</ul>
+<p>!<img alt="Image Description" src="/images/Pasted%20image%2020241204115640.png"></p>
+<ul>
+<li>Paste your token address in the search bar and CELEBRATE!!</li>
+</ul>
+<p>!<img alt="Image Description" src="/images/Pasted%20image%2020241204115742.png"></p>
+<h2 id="lets-make-some-tokens">Let&rsquo;s make some tokens<a href="#lets-make-some-tokens" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<ul>
+<li>At this point, we&rsquo;ve created or <em>minted</em> our token&hellip;.but we haven&rsquo;t created any tokens.</li>
+<li>Let&rsquo;s do that now.</li>
+</ul>
+<h3 id="create-a-token-account">Create a token account<a href="#create-a-token-account" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<ul>
+<li>First we&rsquo;ll need a token account. Why? Each Solana wallet will have individual accounts for each token it has.</li>
+<li>We&rsquo;re creating a token account in our default wallet for our new token, Beard Coin.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>spl-token create-account mnteyhFCjqLu5QwfXmEu49dGybyFN5dwPfAhoiMbjNw
+</span></span></code></pre></div><p>!<img alt="Image Description" src="/images/Pasted%20image%2020241204120037.png"></p>
+<h3 id="lets-print-money">Let&rsquo;s print money<a href="#lets-print-money" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<ul>
+<li>With our token account created, let&rsquo;s mint some tokens. We can make as many as we want and we can do this multiple times (as many as you would like&hellip;.you&rsquo;re the government now!)</li>
+<li>We&rsquo;ll start with 1000.</li>
+<li><em>Note: You can only do this with the dad account we created. It&rsquo;s the boss, only he can mint new tokens.</em></li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>spl-token mint mnteyhFCjqLu5QwfXmEu49dGybyFN5dwPfAhoiMbjNw <span style="color:#ae81ff">1000</span>
+</span></span></code></pre></div><p>!<img alt="Image Description" src="/images/Pasted%20image%2020241204120256.png"></p>
+<ul>
+<li>Let&rsquo;s check the balance of our wallet</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>spl-token balance mnteyhFCjqLu5QwfXmEu49dGybyFN5dwPfAhoiMbjNw
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## We&#39;re rich!!</span>
+</span></span></code></pre></div><h3 id="send-some-tokens-to-a-friend">Send some tokens to a friend<a href="#send-some-tokens-to-a-friend" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<ul>
+<li>You can send to anyone with a solana wallet address.</li>
+<li>They will need a way to switch to the <em>devnet</em> to be able to see the token and balance.</li>
+<li>I&rsquo;m going to send to one of my wallets</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>spl-token transfer mnteyhFCjqLu5QwfXmEu49dGybyFN5dwPfAhoiMbjNw <span style="color:#ae81ff">10</span> G5EibadVBKxnshP3NSFagJokfxXCD2VPm6WXoqgDSdQ2 --fund-recipient --allow-unfunded-recipient
+</span></span></code></pre></div><p>!<img alt="Image Description" src="/images/Pasted%20image%2020241204120725.png"></p>
+<p>![[Pasted image 20241204120929.png|300]]</p>
+<p>DONE!! You&rsquo;ve just setup a token on the devnet blockchain. Again, you can stop here. But it you want to have a REAL coin that is tradeable and is on the real blockchain.</p>
+<h2 id="going-to-market">Going to Market<a href="#going-to-market" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>spl-token authorize mntbDZof8kRCoSkjW6tR9J7mvBBM4FWLQ2ysEJowAyh mint --disable
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>spl-token authorize mntbDZof8kRCoSkjW6tR9J7mvBBM4FWLQ2ysEJowAyh freeze --disable
+</span></span></code></pre></div><p>if you ever need to update metadata</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>spl-token update-metadata mntbDZof8kRCoSkjW6tR9J7mvBBM4FWLQ2ysEJowAyh uri https://salmon-effective-mosquito-301.mypinata.cloud/ipfs/QmZX81uxJvhtoaAwrcqSdcsbJz1pWZv4gJje17bYTz3Fo3
+</span></span></code></pre></div><p>burn it</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>spl-token burn LPTokenAddress <span style="color:#ae81ff">100</span>
+</span></span></code></pre></div>
+      </div></div>
+
+  
+    
+<div class="pagination">
+  <div class="pagination__title">
+    <span class="pagination__title-h">Read other posts</span>
+    <hr />
+  </div>
+  <div class="pagination__buttons">
+    
+    
+    
+      <a href="/posts/the-future-of-ai-and-what-it-means-for-us---blog/" class="button inline next">
+        Some Raw Thoughts on AI
+      </a>
+    
+  </div>
+</div>
+
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2024 Powered by <a href="https://gohugo.io">Hugo</a></span>
+    
+      <span>:: <a href="https://github.com/panr/hugo-theme-terminal" target="_blank">Theme</a> made by <a href="https://github.com/panr" target="_blank">panr</a></span>
+      </div>
+  </div>
+</footer>
+
+
+
+
+
+
+<script type="text/javascript" src="/bundle.min.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>

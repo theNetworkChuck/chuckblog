@@ -6,7 +6,17 @@
     <description>Recent content in Tags on Terminal</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 25 Nov 2024 00:00:00 +0000</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 04 Dec 2024 00:00:00 +0000</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Networkchuck</title>
+      <link>/tags/networkchuck/</link>
+      <pubDate>Wed, 04 Dec 2024 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/networkchuck/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
     <item>
       <title>Ai</title>
       <link>/tags/ai/</link>
@@ -23,16 +33,6 @@
       <pubDate>Mon, 25 Nov 2024 00:00:00 +0000</pubDate>
       
       <guid>/tags/personal/</guid>
-      <description></description>
-      <content></content>
-    </item>
-    
-    <item>
-      <title>Networkchuck</title>
-      <link>/tags/networkchuck/</link>
-      <pubDate>Tue, 19 Nov 2024 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/networkchuck/</guid>
       <description></description>
       <content></content>
     </item>
