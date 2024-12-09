@@ -308,6 +308,31 @@ Yes&hellip;.I put a phone system in my house In this video&hellip;I put a phone 
 <li>There are many options for this but one of my favorites is voip.ms.</li>
 <li>Here is the documentation for 3CX: <a href="https://www.3cx.com/docs/sip-trunk/voip-ms-canada/">https://www.3cx.com/docs/sip-trunk/voip-ms-canada/</a></li>
 </ul>
+<h1 id="call-your-ai-this-is-awesome">Call your AI (this is AWESOME)<a href="#call-your-ai-this-is-awesome" class="hanchor" ariaLabel="Anchor">#</a> </h1>
+<ul>
+<li>Yes, you can call your AI voice pipeline with your phone system.</li>
+<li>You WILL need:
+<ul>
+<li>Home Assistant setup: <a href="https://youtu.be/k02P5nghmfs?si=3dpZ7EdjQcjVfSpL">https://youtu.be/k02P5nghmfs?si=3dpZ7EdjQcjVfSpL</a></li>
+<li>A voice pipeline with AI setup: <a href="https://youtu.be/XvbVePuP7NY?si=Cx57abeA113kfK3h">https://youtu.be/XvbVePuP7NY?si=Cx57abeA113kfK3h</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="you-have-2-options-to-make-this-work">You have 2 options to make this work<a href="#you-have-2-options-to-make-this-work" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<h4 id="if-you-are-on-the-3cx-cloud-instance">If you are on the 3CX Cloud instance<a href="#if-you-are-on-the-3cx-cloud-instance" class="hanchor" ariaLabel="Anchor">#</a> </h4>
+<ul>
+<li>You MUST have an ATA with an analog phone.</li>
+</ul>
+<h4 id="if-you-are-on-prem">If you are on-prem<a href="#if-you-are-on-prem" class="hanchor" ariaLabel="Anchor">#</a> </h4>
+<ul>
+<li>You can simply create a SIP trunk to your Home Assistant locally.</li>
+</ul>
+<h2 id="adjusting-the-ata-dial-plan">Adjusting the ATA Dial Plan<a href="#adjusting-the-ata-dial-plan" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<ul>
+<li>Adjust your ATA dial plan to THIS to make it create a SIP trunk with your Home Assistant instance</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>x+|<span style="color:#ae81ff">\x</span>x+|<span style="color:#ae81ff">\*</span>x+|<span style="color:#ae81ff">\*\*</span>x+<span style="color:#ae81ff">\x</span>.x.x.x
+</span></span></code></pre></div><p>!<img alt="Image Description" src="/images/Pasted%20image%2020241209094549.png"></p>
 
       </div></div>
 
