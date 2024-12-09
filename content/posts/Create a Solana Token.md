@@ -230,7 +230,7 @@ solana-keygen grind --starts-with mnt:1
 - Make sure to include your own mint address below.
 
 ```bash
-spl-token create-token \ 
+spl-token create-token \
 --program-id TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb \
 --enable-metadata \
 --decimals 9 \
@@ -260,7 +260,7 @@ mnt-your-mint-address.json
 
 - Go to *IPFS Files*
 
-![[Pasted image 20241204113809.png|300]]
+!![Image Description](/images/Pasted%20image%2020241204113809.png)
 
 - Upload your file
 !![Image Description](/images/Pasted%20image%2020241204113836.png)
@@ -379,7 +379,7 @@ spl-token transfer mnteyhFCjqLu5QwfXmEu49dGybyFN5dwPfAhoiMbjNw 10 G5EibadVBKxnsh
 
 !![Image Description](/images/Pasted%20image%2020241204120725.png)
 
-![[Pasted image 20241204120929.png|300]]
+!![Image Description](/images/Pasted%20image%2020241204120929.png)
 
 DONE!! You've just setup a token on the devnet blockchain. Again, you can stop here. But it you want to have a REAL coin that is tradeable and is on the real blockchain.
 
