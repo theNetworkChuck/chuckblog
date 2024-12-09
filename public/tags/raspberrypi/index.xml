@@ -176,6 +176,31 @@
 &lt;li&gt;There are many options for this but one of my favorites is voip.ms.&lt;/li&gt;
 &lt;li&gt;Here is the documentation for 3CX: &lt;a href=&#34;https://www.3cx.com/docs/sip-trunk/voip-ms-canada/&#34;&gt;https://www.3cx.com/docs/sip-trunk/voip-ms-canada/&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
+&lt;h1 id=&#34;call-your-ai-this-is-awesome&#34;&gt;Call your AI (this is AWESOME)&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Yes, you can call your AI voice pipeline with your phone system.&lt;/li&gt;
+&lt;li&gt;You WILL need:
+&lt;ul&gt;
+&lt;li&gt;Home Assistant setup: &lt;a href=&#34;https://youtu.be/k02P5nghmfs?si=3dpZ7EdjQcjVfSpL&#34;&gt;https://youtu.be/k02P5nghmfs?si=3dpZ7EdjQcjVfSpL&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;A voice pipeline with AI setup: &lt;a href=&#34;https://youtu.be/XvbVePuP7NY?si=Cx57abeA113kfK3h&#34;&gt;https://youtu.be/XvbVePuP7NY?si=Cx57abeA113kfK3h&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;you-have-2-options-to-make-this-work&#34;&gt;You have 2 options to make this work&lt;/h2&gt;
+&lt;h4 id=&#34;if-you-are-on-the-3cx-cloud-instance&#34;&gt;If you are on the 3CX Cloud instance&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;You MUST have an ATA with an analog phone.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;if-you-are-on-prem&#34;&gt;If you are on-prem&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;You can simply create a SIP trunk to your Home Assistant locally.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;adjusting-the-ata-dial-plan&#34;&gt;Adjusting the ATA Dial Plan&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Adjust your ATA dial plan to THIS to make it create a SIP trunk with your Home Assistant instance&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;x+|&lt;span style=&#34;color:#ae81ff&#34;&gt;\x&lt;/span&gt;x+|&lt;span style=&#34;color:#ae81ff&#34;&gt;\*&lt;/span&gt;x+|&lt;span style=&#34;color:#ae81ff&#34;&gt;\*\*&lt;/span&gt;x+&lt;span style=&#34;color:#ae81ff&#34;&gt;\x&lt;/span&gt;.x.x.x
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;!&lt;img alt=&#34;Image Description&#34; src=&#34;/images/Pasted%20image%2020241209094549.png&#34;&gt;&lt;/p&gt;
 </content>
     </item>
     

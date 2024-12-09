@@ -88,4 +88,29 @@ tags:
 
 
 
+# Call your AI (this is AWESOME)
 
+- Yes, you can call your AI voice pipeline with your phone system. 
+- You WILL need:
+	- Home Assistant setup: https://youtu.be/k02P5nghmfs?si=3dpZ7EdjQcjVfSpL
+	- A voice pipeline with AI setup: https://youtu.be/XvbVePuP7NY?si=Cx57abeA113kfK3h
+
+## You have 2 options to make this work
+
+#### If you are on the 3CX Cloud instance
+
+- You MUST have an ATA with an analog phone.
+
+#### If you are on-prem
+
+- You can simply create a SIP trunk to your Home Assistant locally.
+
+## Adjusting the ATA Dial Plan
+
+- Adjust your ATA dial plan to THIS to make it create a SIP trunk with your Home Assistant instance
+
+```bash
+x+|\xx+|\*x+|\*\*x+\x.x.x.x
+```
+
+!![Image Description](/images/Pasted%20image%2020241209094549.png)
