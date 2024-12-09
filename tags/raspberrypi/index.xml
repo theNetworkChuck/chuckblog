@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>RaspberryPi on Terminal</title>
+    <link>/tags/raspberrypi/</link>
+    <description>Recent content in RaspberryPi on Terminal</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 09 Dec 2024 00:00:00 +0000</lastBuildDate><atom:link href="/tags/raspberrypi/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>I Built a Phone System Because No One Answers Me</title>
+      <link>/posts/i-built-a-phone-system-because-no-one-answers-me/</link>
+      <pubDate>Mon, 09 Dec 2024 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/i-built-a-phone-system-because-no-one-answers-me/</guid>
+      <description>&lt;p&gt;!&lt;img alt=&#34;Image Description&#34; src=&#34;/images/Pasted%20image%2020241209091545.png&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;yesi-put-a-phone-system-in-my-house&#34;&gt;Yes&amp;hellip;.I put a phone system in my house&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;In this video&amp;hellip;I put a phone system in my house and business.&lt;/li&gt;
+&lt;li&gt;Why?&lt;/li&gt;
+&lt;li&gt;Because no one answers their phones. My wife and daughters all have iphones and apple watches&amp;hellip;.but seem to never be able to answer their phones. I can NEVER get ahold of someone when I need to!&lt;/li&gt;
+&lt;li&gt;As a complete nerd and former phone system engineer&amp;hellip;.this solution was obvious&amp;hellip;..install a phone system and put a phone in every room.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;butits-not-that-simple&#34;&gt;But&amp;hellip;.it&amp;rsquo;s not that simple&amp;hellip;.&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;My wife is very artsy and particular about the design of our house and what goes in it. She won&amp;rsquo;t allow just anything to be put on a wall or a side table. These phones had to be old, aesthetic, mid-century&amp;hellip;.which means I couldn&amp;rsquo;t use a typical SIP phone like I normally would.&lt;/li&gt;
+&lt;li&gt;Also, my kids are obsessed with the old phones they see on the older tv shows and movies. They had to have them.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;sowhat-phone-system-do-we-need-anything-for-this&#34;&gt;So&amp;hellip;.what phone system? Do we need anything for this?&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;For most people, nothing. We&amp;rsquo;re using the 3CX phone system and it&amp;rsquo;s going to be free for up to 10 users, which is more than enough for even a large family like mine. It is also hosted completely free in the cloud forever and you can literally get this setup in minutes.&lt;/li&gt;
+&lt;li&gt;FULL DISCLOSURE, this video is sponsored by 3CX. I have worked with them for a long time and collaborated on a video a while back where we installed a phone system on a Raspberry Pi 4. This is no longer supported so I needed to redeploy a phone system anyway, to solve my domestic issues and I really needed a phone system for my business.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;do-we-need-any-hardware-phones&#34;&gt;Do we need any hardware? Phones?&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Physical phones are optional. But they are very fun and I highly recommend them.&lt;/li&gt;
+&lt;li&gt;In the event you do what some physical phones, you&amp;rsquo;ll need 2 things:
+&lt;ul&gt;
+&lt;li&gt;A phone&amp;hellip;.duh&lt;/li&gt;
+&lt;li&gt;A device inside your network that can connect your physical phone to the 3CX cloud instance.
+&lt;ul&gt;
+&lt;li&gt;This can be either a:
+&lt;ul&gt;
+&lt;li&gt;Raspberry Pi (4/5) running the 3CX SBC (Session Border Controller)
+&lt;ul&gt;
+&lt;li&gt;Raspberry Pi 4: &lt;a href=&#34;https://geni.us/mzJF55&#34;&gt;https://geni.us/mzJF55&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Raspberry Pi 5: &lt;a href=&#34;https://geni.us/z0BVIc&#34;&gt;https://geni.us/z0BVIc&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;A &lt;em&gt;router phone&lt;/em&gt;, a fancier phone that has SBC capabilities baked in.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;phones-what-phones&#34;&gt;Phones? What phones?&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Here are the phones that I purchased and can verify work pretty well.&lt;/p&gt;</description>
+      <content>&lt;p&gt;!&lt;img alt=&#34;Image Description&#34; src=&#34;/images/Pasted%20image%2020241209091545.png&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;yesi-put-a-phone-system-in-my-house&#34;&gt;Yes&amp;hellip;.I put a phone system in my house&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;In this video&amp;hellip;I put a phone system in my house and business.&lt;/li&gt;
+&lt;li&gt;Why?&lt;/li&gt;
+&lt;li&gt;Because no one answers their phones. My wife and daughters all have iphones and apple watches&amp;hellip;.but seem to never be able to answer their phones. I can NEVER get ahold of someone when I need to!&lt;/li&gt;
+&lt;li&gt;As a complete nerd and former phone system engineer&amp;hellip;.this solution was obvious&amp;hellip;..install a phone system and put a phone in every room.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;butits-not-that-simple&#34;&gt;But&amp;hellip;.it&amp;rsquo;s not that simple&amp;hellip;.&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;My wife is very artsy and particular about the design of our house and what goes in it. She won&amp;rsquo;t allow just anything to be put on a wall or a side table. These phones had to be old, aesthetic, mid-century&amp;hellip;.which means I couldn&amp;rsquo;t use a typical SIP phone like I normally would.&lt;/li&gt;
+&lt;li&gt;Also, my kids are obsessed with the old phones they see on the older tv shows and movies. They had to have them.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;sowhat-phone-system-do-we-need-anything-for-this&#34;&gt;So&amp;hellip;.what phone system? Do we need anything for this?&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;For most people, nothing. We&amp;rsquo;re using the 3CX phone system and it&amp;rsquo;s going to be free for up to 10 users, which is more than enough for even a large family like mine. It is also hosted completely free in the cloud forever and you can literally get this setup in minutes.&lt;/li&gt;
+&lt;li&gt;FULL DISCLOSURE, this video is sponsored by 3CX. I have worked with them for a long time and collaborated on a video a while back where we installed a phone system on a Raspberry Pi 4. This is no longer supported so I needed to redeploy a phone system anyway, to solve my domestic issues and I really needed a phone system for my business.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;do-we-need-any-hardware-phones&#34;&gt;Do we need any hardware? Phones?&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Physical phones are optional. But they are very fun and I highly recommend them.&lt;/li&gt;
+&lt;li&gt;In the event you do what some physical phones, you&amp;rsquo;ll need 2 things:
+&lt;ul&gt;
+&lt;li&gt;A phone&amp;hellip;.duh&lt;/li&gt;
+&lt;li&gt;A device inside your network that can connect your physical phone to the 3CX cloud instance.
+&lt;ul&gt;
+&lt;li&gt;This can be either a:
+&lt;ul&gt;
+&lt;li&gt;Raspberry Pi (4/5) running the 3CX SBC (Session Border Controller)
+&lt;ul&gt;
+&lt;li&gt;Raspberry Pi 4: &lt;a href=&#34;https://geni.us/mzJF55&#34;&gt;https://geni.us/mzJF55&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Raspberry Pi 5: &lt;a href=&#34;https://geni.us/z0BVIc&#34;&gt;https://geni.us/z0BVIc&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;A &lt;em&gt;router phone&lt;/em&gt;, a fancier phone that has SBC capabilities baked in.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;phones-what-phones&#34;&gt;Phones? What phones?&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Here are the phones that I purchased and can verify work pretty well.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Also, here is the official list of supported phones that work with 3CX: &lt;a href=&#34;https://www.3cx.com/sip-phones/&#34;&gt;https://www.3cx.com/sip-phones/&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Snom D735: &lt;a href=&#34;https://geni.us/IZmO&#34;&gt;https://geni.us/IZmO&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;about $85. A very solid option.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Fanvil X3SG: &lt;a href=&#34;https://geni.us/oA1i&#34;&gt;https://geni.us/oA1i&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;about $69, very solid as well.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Yealink T54W (a router phone): &lt;a href=&#34;https://geni.us/GhUAAy&#34;&gt;https://geni.us/GhUAAy&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;around $150, more expensive because it&amp;rsquo;s pretty and is a router phone.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Fanvil H2U: &lt;a href=&#34;https://geni.us/WBGTg&#34;&gt;https://geni.us/WBGTg&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;compact and weird. Hotel-like, if you wanna go for that aesthetic. $63&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;old-phones-requiring-an-ata&#34;&gt;Old Phones (requiring an ATA)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Sangyn Vintage Phone (red, table top): &lt;a href=&#34;https://geni.us/AxmFI4&#34;&gt;https://geni.us/AxmFI4&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;$35 and gorgeous. Probably my favorite. Feels solid.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;TelPal Corded wall phone: &lt;a href=&#34;https://geni.us/JZazPcI&#34;&gt;https://geni.us/JZazPcI&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;$32 and INCREDIBLE. Put this sucker on a wall and you are in the 1970s. Feels very solid. My second favorite, comes in a variety of colors.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;ata&#34;&gt;ATA&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;You&amp;rsquo;ll need an ATA (analog telephone adapter) for these old phones. I recommend this one:
+&lt;ul&gt;
+&lt;li&gt;Grandstream HT801: &lt;a href=&#34;https://geni.us/TaZ7p&#34;&gt;https://geni.us/TaZ7p&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;the-setup-phone-system-install&#34;&gt;The SETUP (Phone System Install)&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;This setup isn&amp;rsquo;t crazy and is pretty easy to follow in the video.&lt;/li&gt;
+&lt;li&gt;Here is your link to sign up for 3CX: &lt;a href=&#34;https://www.3cx.com/signup/?source=networkchuck&#34;&gt;https://www.3cx.com/signup/?source=networkchuck&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;setting-up-the-3cx-sbc-on-a-raspberry-pi&#34;&gt;Setting up the 3CX SBC on a Raspberry Pi&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;The Pis
+&lt;ul&gt;
+&lt;li&gt;Raspberry Pi 4: &lt;a href=&#34;https://geni.us/mzJF55&#34;&gt;https://geni.us/mzJF55&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Raspberry Pi 5: &lt;a href=&#34;https://geni.us/z0BVIc&#34;&gt;https://geni.us/z0BVIc&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;The documentation: &lt;a href=&#34;https://www.3cx.com/docs/installing-pbx-raspberry-pi/&#34;&gt;https://www.3cx.com/docs/installing-pbx-raspberry-pi/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;setting-up-a-sip-trunk--a-real-phone-number&#34;&gt;Setting up a SIP Trunk ( a real phone number)&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;To get a &lt;strong&gt;REAL&lt;/strong&gt; phone number to call the outside world and vice-versa, you&amp;rsquo;ll need to setup an account with a SIP provider and setup a SIP Trunk to your phone system.&lt;/li&gt;
+&lt;li&gt;There are many options for this but one of my favorites is voip.ms.&lt;/li&gt;
+&lt;li&gt;Here is the documentation for 3CX: &lt;a href=&#34;https://www.3cx.com/docs/sip-trunk/voip-ms-canada/&#34;&gt;https://www.3cx.com/docs/sip-trunk/voip-ms-canada/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+    </item>
+    
+  </channel>
+</rss>
