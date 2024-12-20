@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>Building a Hacker Dropbox (access any network) :: Terminal</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="What is a Hacker Dropbox? (and why you need one&hellip;.even if you aren&rsquo;t a hacker) Here is a great definition from ChatGPT: a small, discreet, and often portable device designed to be covertly placed in a target network to provide remote access for a hacker or penetration tester. It typically contains hardware and software configured to exploit the network or collect sensitive information. If you&rsquo;re a hacker&hellip;this is a no brainer. Get instant access to a remote network by dropping off a device. But&hellip;.if you&rsquo;re not a hacker&hellip;why do you need this? Family HelpDesk Support If you&rsquo;re like me, you are likely the official technical support for your family and friends. I also inherited the role of helpdesk support for my church&hellip;these kinds of things just happen by default when you are in tech and people find out about your technical skills. This isn&rsquo;t an easy thing to do, especially when it comes to troubleshooting networks for your family. Is the network up? Why is it slow? Sometimes a FaceTime call just isn&rsquo;t going to cut it. If I&rsquo;m going to be the support for my church and family, I&rsquo;m going to take my role seriously. I need FULL control of the remote network&hellip;&hellip;no more playing around!!! With the Hacker Dropbox, I can drop off a small device, in my case it&rsquo;s going to be a Raspberry Pi 4. (it can be a lot of things, as long as the device is Linux-based and is 64-bit). Instantly I get access to this remote network, enabling me to provide remote support and access any device. This is NOT VPN This is not a VPN (VIrtual Private Network) solution&hellip;.it&rsquo;s much better. This is a ZTNA (Zero-Trust Network Access) solution. It&rsquo;s called Twingate and I&rsquo;ve been using them for a long time in my business and personal networks. I talk more about them in the video above but in short, they allow you to get and give remote access to networks in the most secure way. They are used by everyone from large enterprises to homelabbers looking to access their Plex server. This isn&rsquo;t the first video I&rsquo;ve made about them but this is the first time I&rsquo;ve featured a use-case like this. Oh, it&rsquo;s also FREE for home labbers. (And&hellip;cough&hellip;.businesses that don&rsquo;t have a ton of employees&hellip;.like me.) You don&rsquo;t need to know ANYTHING about the network I wanted this to be a turnkey solution even if you don&rsquo;t know anything about the remote network. All you&rsquo;ll have to do is plug in an ethernet cable (or connect to wifi&hellip;.but you&rsquo;ll need to know the SSID and password) and you will know everything you need to know about that network&hellip;..but how? Twingate has a powerful API that allows us to do many things&hellip;including write python scripts that will automagically tell us the private IP address of our Hacker Dropbox (Raspberry Pi) and the Public IP address of the network, giving us instant access to this Hacker Dropbox AND the network. This guide will contain that script. What do you need? Any Linux-based 64-bit system will do. You&rsquo;ll need at least 1 CPU and 2GB RAM (recommended)&hellip;but you can go as low as 512MB of RAM. You can also run this as a Docker container, which is my favorite way to deploy this in my home lab. In this example, with the Hacker Dropbox, I&rsquo;m using a Raspberry Pi 4 running Raspberry Pi OS Lite - 64-bit and installing it directly on the system (no docker container) What other hardware options do I have? Again, this can be many things, but here are some ideas to get the juices flowing:
+" />
+<meta name="keywords" content="" />
+
+  <meta name="robots" content="noodp" />
+
+<link rel="canonical" href="/posts/building-a-hacker-dropbox-access-any-network/" />
+
+
+
+
+
+  
+  <link rel="stylesheet" href="/css/buttons.min.2bc533403a27dfe0e93105a92502b42ce4587e2e4a87d9f7d349e51e16e09478.css">
+
+  
+  <link rel="stylesheet" href="/css/code.min.00125962708925857e7b66dbc58391d55be1191a3d0ce2034de8c9cd2c481c36.css">
+
+  
+  <link rel="stylesheet" href="/css/fonts.min.4881f0c525f3ce2a1864fb6e96676396cebe1e6fcef1933e8e1dde7041004fb5.css">
+
+  
+  <link rel="stylesheet" href="/css/footer.min.2e3eb191baee58dd05a9f0104ac1fab0827bca7c64dafe0b2579f934c33a1d69.css">
+
+  
+  <link rel="stylesheet" href="/css/gist.min.a751e8b0abe1ba8bc53ced52a38b19d8950fe78ca29454ea8c2595cf26aad5c0.css">
+
+  
+  <link rel="stylesheet" href="/css/header.min.b6fb4423cf82a9f9d7abc9cd010223fa3d70a6526a3f28f8e17d814c06e18f9e.css">
+
+  
+  <link rel="stylesheet" href="/css/main.min.fe8dc560fccb53a458b0db19ccb7b265764ac46b68596b7e099c6793054dd457.css">
+
+  
+  <link rel="stylesheet" href="/css/menu.min.83637a90d903026bc280d3f82f96ceb06c5fc72b7c1a8d686afb5bbf818a29f7.css">
+
+  
+  <link rel="stylesheet" href="/css/pagination.min.82f6400eae7c7c6dc3c866733c2ec0579e4089608fea69400ff85b3880aa0d3c.css">
+
+  
+  <link rel="stylesheet" href="/css/post.min.fc74ca360273c1d828da3c02b8174eba435607b369d98418ccc6f2243cd4e75d.css">
+
+  
+  <link rel="stylesheet" href="/css/prism.min.9023bbc24533d09e97a51a0a42a5a7bfe4c591ae167c5551fb1d2191d11977c0.css">
+
+  
+  <link rel="stylesheet" href="/css/syntax.min.cc789ed9377260d7949ea4c18781fc58959a89287210fe4edbff44ebfc1511b6.css">
+
+  
+  <link rel="stylesheet" href="/css/terminal.min.dd0bf9c7cacb24c1b0184f52f1869b274e06689557468cc7030ccf632328eb97.css">
+
+  
+  <link rel="stylesheet" href="/css/terms.min.b81791663c3790e738e571cdbf802312390d30e4b1d8dc9d814a5b5454d0ac11.css">
+
+
+
+
+
+
+
+<link rel="shortcut icon" href="/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+
+<meta name="twitter:card" content="summary" />
+
+  
+    <meta name="twitter:site" content="" />
+  
+    <meta name="twitter:creator" content="" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Building a Hacker Dropbox (access any network)">
+<meta property="og:description" content="What is a Hacker Dropbox? (and why you need one&hellip;.even if you aren&rsquo;t a hacker) Here is a great definition from ChatGPT: a small, discreet, and often portable device designed to be covertly placed in a target network to provide remote access for a hacker or penetration tester. It typically contains hardware and software configured to exploit the network or collect sensitive information. If you&rsquo;re a hacker&hellip;this is a no brainer. Get instant access to a remote network by dropping off a device. But&hellip;.if you&rsquo;re not a hacker&hellip;why do you need this? Family HelpDesk Support If you&rsquo;re like me, you are likely the official technical support for your family and friends. I also inherited the role of helpdesk support for my church&hellip;these kinds of things just happen by default when you are in tech and people find out about your technical skills. This isn&rsquo;t an easy thing to do, especially when it comes to troubleshooting networks for your family. Is the network up? Why is it slow? Sometimes a FaceTime call just isn&rsquo;t going to cut it. If I&rsquo;m going to be the support for my church and family, I&rsquo;m going to take my role seriously. I need FULL control of the remote network&hellip;&hellip;no more playing around!!! With the Hacker Dropbox, I can drop off a small device, in my case it&rsquo;s going to be a Raspberry Pi 4. (it can be a lot of things, as long as the device is Linux-based and is 64-bit). Instantly I get access to this remote network, enabling me to provide remote support and access any device. This is NOT VPN This is not a VPN (VIrtual Private Network) solution&hellip;.it&rsquo;s much better. This is a ZTNA (Zero-Trust Network Access) solution. It&rsquo;s called Twingate and I&rsquo;ve been using them for a long time in my business and personal networks. I talk more about them in the video above but in short, they allow you to get and give remote access to networks in the most secure way. They are used by everyone from large enterprises to homelabbers looking to access their Plex server. This isn&rsquo;t the first video I&rsquo;ve made about them but this is the first time I&rsquo;ve featured a use-case like this. Oh, it&rsquo;s also FREE for home labbers. (And&hellip;cough&hellip;.businesses that don&rsquo;t have a ton of employees&hellip;.like me.) You don&rsquo;t need to know ANYTHING about the network I wanted this to be a turnkey solution even if you don&rsquo;t know anything about the remote network. All you&rsquo;ll have to do is plug in an ethernet cable (or connect to wifi&hellip;.but you&rsquo;ll need to know the SSID and password) and you will know everything you need to know about that network&hellip;..but how? Twingate has a powerful API that allows us to do many things&hellip;including write python scripts that will automagically tell us the private IP address of our Hacker Dropbox (Raspberry Pi) and the Public IP address of the network, giving us instant access to this Hacker Dropbox AND the network. This guide will contain that script. What do you need? Any Linux-based 64-bit system will do. You&rsquo;ll need at least 1 CPU and 2GB RAM (recommended)&hellip;but you can go as low as 512MB of RAM. You can also run this as a Docker container, which is my favorite way to deploy this in my home lab. In this example, with the Hacker Dropbox, I&rsquo;m using a Raspberry Pi 4 running Raspberry Pi OS Lite - 64-bit and installing it directly on the system (no docker container) What other hardware options do I have? Again, this can be many things, but here are some ideas to get the juices flowing:
+" />
+<meta property="og:url" content="/posts/building-a-hacker-dropbox-access-any-network/" />
+<meta property="og:site_name" content="Terminal" />
+
+  <meta property="og:image" content="/og-image.png">
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+
+  <meta property="article:published_time" content="2024-12-20 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+
+
+<div class="container">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    Terminal
+  </div>
+</a>
+
+    </div>
+    
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/showcase">Showcase</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
+    
+  </div>
+  
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
+    
+      
+        
+          <li><a href="/about" >About</a></li>
+        
+      
+        
+          <li><a href="/showcase" >Showcase</a></li>
+        
+      
+      
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="/posts/building-a-hacker-dropbox-access-any-network/">Building a Hacker Dropbox (access any network)</a>
+  </h1>
+  <div class="post-meta"><time class="post-date">2024-12-20</time></div>
+
+  
+    <span class="post-tags">
+      
+      #<a href="/tags/networkchuck/">NetworkChuck</a>&nbsp;
+      
+    </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <h2 id="what-is-a-hacker-dropbox-and-why-you-need-oneeven-if-you-arent-a-hacker">What is a <em>Hacker Dropbox</em>? (and why you need one&hellip;.even if you aren&rsquo;t a hacker)<a href="#what-is-a-hacker-dropbox-and-why-you-need-oneeven-if-you-arent-a-hacker" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<ul>
+<li>Here is a great definition from ChatGPT: <em>a small, discreet, and often portable device designed to be covertly placed in a target network to provide remote access for a hacker or penetration tester. It typically contains hardware and software configured to exploit the network or collect sensitive information.</em></li>
+<li>If you&rsquo;re a hacker&hellip;this is a no brainer. Get instant access to a remote network by dropping off a device. But&hellip;.if you&rsquo;re not a hacker&hellip;why do you need this?</li>
+</ul>
+<h3 id="family-helpdesk-support">Family HelpDesk Support<a href="#family-helpdesk-support" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<ul>
+<li>If you&rsquo;re like me, you are likely the official technical support for your family and friends. I also inherited the role of helpdesk support for my church&hellip;these kinds of things just happen by default when you are in tech and people find out about your technical skills.</li>
+<li>This isn&rsquo;t an easy thing to do, especially when it comes to troubleshooting networks for your family. Is the network up? Why is it slow? Sometimes a FaceTime call just isn&rsquo;t going to cut it.</li>
+<li>If I&rsquo;m going to be the support for my church and family, I&rsquo;m going to take my role seriously. I need FULL control of the remote network&hellip;&hellip;no more playing around!!!</li>
+<li>With the <em>Hacker Dropbox</em>, I can drop off a small device, in my case it&rsquo;s going to be a Raspberry Pi 4. (it can be a lot of things, as long as the device is Linux-based and is 64-bit). Instantly I get access to this remote network, enabling me to provide remote support and access any device.</li>
+</ul>
+<h3 id="this-is-not-vpn">This is NOT VPN<a href="#this-is-not-vpn" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<ul>
+<li>This is not a VPN (VIrtual Private Network) solution&hellip;.it&rsquo;s much better.</li>
+<li>This is a ZTNA (Zero-Trust Network Access) solution. It&rsquo;s called Twingate and I&rsquo;ve been using them for a long time in my business and personal networks. I talk more about them in the video above but in short, they allow you to get and give remote access to networks in the most secure way. They are used by everyone from large enterprises to homelabbers looking to access their Plex server.</li>
+<li>This isn&rsquo;t the first video I&rsquo;ve made about them but this is the first time I&rsquo;ve featured a use-case like this.</li>
+<li>Oh, it&rsquo;s also <strong>FREE</strong> for home labbers. (And&hellip;cough&hellip;.businesses that don&rsquo;t have a ton of employees&hellip;.like me.)</li>
+</ul>
+<h3 id="you-dont-need-to-know-anything-about-the-network">You don&rsquo;t need to know ANYTHING about the network<a href="#you-dont-need-to-know-anything-about-the-network" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<ul>
+<li>I wanted this to be a turnkey solution even if you don&rsquo;t know anything about the remote network. All you&rsquo;ll have to do is plug in an ethernet cable (or connect to wifi&hellip;.but you&rsquo;ll need to know the SSID and password) and you will know everything you need to know about that network&hellip;..but how?</li>
+<li>Twingate has a powerful API that allows us to do many things&hellip;including write python scripts that will automagically tell us the private IP address of our <em>Hacker Dropbox</em> (Raspberry Pi) and the Public IP address of the network, giving us instant access to this <em>Hacker Dropbox</em> AND the network.</li>
+<li>This guide will contain that script.</li>
+</ul>
+<h2 id="what-do-you-need">What do you need?<a href="#what-do-you-need" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<ul>
+<li>Any Linux-based 64-bit system will do. You&rsquo;ll need at least 1 CPU and 2GB RAM (recommended)&hellip;but you can go as low as 512MB of RAM.</li>
+<li>You can also run this as a Docker container, which is my favorite way to deploy this in my home lab.</li>
+<li>In this example, with the <em>Hacker Dropbox</em>, I&rsquo;m using a Raspberry Pi 4 running Raspberry Pi OS Lite - 64-bit and installing it directly on the system (no docker container)</li>
+</ul>
+<h3 id="what-other-hardware-options-do-i-have">What other hardware options do I have?<a href="#what-other-hardware-options-do-i-have" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<p>Again, this can be many things, but here are some ideas to get the juices flowing:</p>
+<ul>
+<li>ZImaboard</li>
+<li>Raspberry Pi 4/5</li>
+<li>Raspberry Pi 400/500</li>
+<li>Old laptops</li>
+<li>NAS</li>
+<li>Intel NUC or other mini-pcs</li>
+</ul>
+<h1 id="the-tutorial">The Tutorial<a href="#the-tutorial" class="hanchor" ariaLabel="Anchor">#</a> </h1>
+<h2 id="step-1---setup-twingate">Step 1 - Setup Twingate<a href="#step-1---setup-twingate" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<p>This setup is VERY easy and is all done in the cloud.</p>
+<ul>
+<li>Sign up for Twingate here: <a href="https://ntck.co/twingate_ztna">https://ntck.co/twingate_ztna</a>
+<ul>
+<li>You&rsquo;ll create a new Twingate network</li>
+</ul>
+</li>
+</ul>
+<p>!<img alt="Image Description" src="/images/Pasted%20image%2020241220112613.png"></p>
+<h2 id="step-2---add-your-first-remote-network">Step 2 - Add your first remote network<a href="#step-2---add-your-first-remote-network" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<p>You will be prompted to go through a wizard, we can skip that for now.</p>
+<ul>
+<li>Click on <em>Remote Networks</em></li>
+</ul>
+<p>!<img alt="Image Description" src="/images/Pasted%20image%2020241220112739.png"></p>
+<ul>
+<li>And then add a <em>Remote Network</em></li>
+</ul>
+<p>!<img alt="Image Description" src="/images/Pasted%20image%2020241220112803.png"></p>
+<ul>
+<li>Choose <em>on-premise</em> for location</li>
+</ul>
+<p>!<img alt="Image Description" src="/images/Pasted%20image%2020241220112825.png"></p>
+<ul>
+<li>Once created, we&rsquo;ll click on the remote network link to jump in and add more config&hellip;like adding a connector.</li>
+</ul>
+<p>!<img alt="Image Description" src="/images/Pasted%20image%2020241220112905.png"></p>
+<h2 id="step-25---prep-your-hacker-dropbox">Step 2.5 - Prep your <em>Hacker Dropbox</em><a href="#step-25---prep-your-hacker-dropbox" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<ul>
+<li>This will vary based on what device you choose but this will normally involve installing a compatible OS (64-bit Linux OS) and getting access to your device via CLI.</li>
+<li>I demo flashing an SD-card for the Raspberry Pi 4 in the video.</li>
+</ul>
+<h2 id="step-3---adding-a-connector-for-your-remote-network">Step 3 - Adding a connector for your remote network<a href="#step-3---adding-a-connector-for-your-remote-network" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<p>The connector, in our case, will be the <em>Hacker Dropbox</em>, a linux-based device running Twingate software, aka, <em>The Connector</em></p>
+<ul>
+<li>Click on <em>Deploy Connector</em></li>
+</ul>
+<p>!<img alt="Image Description" src="/images/Pasted%20image%2020241220113010.png"></p>
+<ul>
+<li>Good practice, run <code>sudo apt update</code> to make sure all your repos are up-to-date (this will different for you if you are running something that isn&rsquo;t Debian-based)</li>
+<li>For the Raspberry Pi example, we are installing the Twingate connector directly on the OS, no container. So we&rsquo;ll select Linux as our option.</li>
+</ul>
+<p>!<img alt="Image Description" src="/images/Pasted%20image%2020241220113353.png"></p>
+<ul>
+<li>Now, generate your access tokens. These will automatically be added the command we&rsquo;ll use to install Twingate here in a moment.</li>
+</ul>
+<p>!<img alt="Image Description" src="/images/Pasted%20image%2020241220113428.png"></p>
+<ul>
+<li>Copy the provided command</li>
+</ul>
+<p>!<img alt="Image Description" src="/images/Pasted%20image%2020241220113458.png"></p>
+<ul>
+<li>Paste that command in your terminal and watch the magic happen.</li>
+</ul>
+<p>!<img alt="Image Description" src="/images/Pasted%20image%2020241220113521.png"></p>
+<p>!<img alt="Image Description" src="/images/Pasted%20image%2020241220113536.png"></p>
+<ul>
+<li>We are actually&hellip;.done. Check Twingate to see if your connector is up.</li>
+</ul>
+<p>!<img alt="Image Description" src="/images/Pasted%20image%2020241220113621.png"></p>
+<h2 id="step-4---add-a-remote-wifi-network-if-not-using-ethernet">Step 4 - Add a remote WiFi Network (if not using ethernet)<a href="#step-4---add-a-remote-wifi-network-if-not-using-ethernet" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<ul>
+<li>This will be Raspberry Pi specific.</li>
+<li>Run this command to access the NetworkManager TUI</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo nmtui
+</span></span></code></pre></div><ul>
+<li>Edit a connection</li>
+</ul>
+<p>!<img alt="Image Description" src="/images/Pasted%20image%2020241220113842.png"></p>
+<ul>
+<li>Select Add</li>
+</ul>
+<p>!<img alt="Image Description" src="/images/Pasted%20image%2020241220113856.png"></p>
+<ul>
+<li>Select WiFi</li>
+</ul>
+<p>!<img alt="Image Description" src="/images/Pasted%20image%2020241220113917.png"></p>
+<ul>
+<li>Add SSID and Password (you&rsquo;ll need to know this for the remote network)</li>
+</ul>
+<p>!<img alt="Image Description" src="/images/Pasted%20image%2020241220113943.png"></p>
+<ul>
+<li>Select <em>Ok</em> and then hit <em>ESC</em> to save and get out of there.</li>
+</ul>
+<h2 id="step-5---use-the-twingate-api-to-learn-about-the-remote-network">Step 5 - Use the Twingate API to learn about the remote network<a href="#step-5---use-the-twingate-api-to-learn-about-the-remote-network" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<p>You only need this option if this is a network you are unfamiliar with. So, for example, you might be offering remote support for your family and you will likely already know their network, 192.168.1.0/24 (for example) and you may have set the static IP address of your <em>Hacker Dropbox</em> and can easily, manually add this as a resource in Twingate.</p>
+<ul>
+<li>Generate an API token</li>
+</ul>
+<p>!<img alt="Image Description" src="/images/Pasted%20image%2020241220114238.png"></p>
+<ul>
+<li>Our script will be provisioning resources so we&rsquo;ll need to give it a good amount of access.</li>
+</ul>
+<p>!<img alt="Image Description" src="/images/Pasted%20image%2020241220114315.png"></p>
+<ul>
+<li>Copy that key and put it somewhere safe.</li>
+</ul>
+<p>!<img alt="Image Description" src="/images/Pasted%20image%2020241220114347.png"></p>
+<h3 id="run-the-python-script">Run the Python Script<a href="#run-the-python-script" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<ul>
+<li>You&rsquo;ll need another computer, can be anything that can run Python. (which&hellip;can be anything, Windows, Mac, Linux.)</li>
+<li>You&rsquo;ll also need Python3 installed, refer to your OS-specific documentation to install Python.</li>
+</ul>
+<h4 id="create-the-script">Create the script<a href="#create-the-script" class="hanchor" ariaLabel="Anchor">#</a> </h4>
+<ul>
+<li>Create a new python script</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>nano twingate.py
+</span></span></code></pre></div><ul>
+<li>paste the following script</li>
+<li>Replace the following variables:
+<ul>
+<li><strong>API_URL</strong></li>
+<li><strong>API_KEY</strong></li>
+<li><strong>TARGET_NETWORK_NAME</strong></li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> gql <span style="color:#f92672">import</span> gql, Client
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> gql.transport.requests <span style="color:#f92672">import</span> RequestsHTTPTransport
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Twingate API settings</span>
+</span></span><span style="display:flex;"><span>API_URL <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;https://****your Twingate network here****.twingate.com/api/graphql/&#34;</span>  <span style="color:#75715e"># Replace &lt;subdomain&gt; with your Twingate subdomain</span>
+</span></span><span style="display:flex;"><span>API_KEY <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;YOUR TWINGATE API KEY&#34;</span>
+</span></span><span style="display:flex;"><span>TARGET_NETWORK_NAME <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;YOUR REMOTE NETWORK&#34;</span>  <span style="color:#75715e"># Replace with your target network name</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>QUERY_REMOTE_NETWORKS <span style="color:#f92672">=</span> gql(<span style="color:#e6db74">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">query GetRemoteNetworkDetails {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  remoteNetworks(after: null, first: 10) {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    edges {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      node {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        id
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        name
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        connectors {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          edges {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            node {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">              id
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">              name
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">              publicIP
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">              privateIPs
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">              remoteNetwork {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                id
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                name
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">              }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;&#34;&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>MUTATION_CREATE_RESOURCE <span style="color:#f92672">=</span> gql(<span style="color:#e6db74">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">mutation CreateResource($name: String!, $address: String!, $remoteNetworkId: ID!) {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  resourceCreate(
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    name: $name,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    address: $address,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    remoteNetworkId: $remoteNetworkId
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  ) {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    ok
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    error
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    entity {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      id
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      name
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      address {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        type
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        value
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;&#34;&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">setup_client</span>():
+</span></span><span style="display:flex;"><span>    transport <span style="color:#f92672">=</span> RequestsHTTPTransport(
+</span></span><span style="display:flex;"><span>        url<span style="color:#f92672">=</span>API_URL,
+</span></span><span style="display:flex;"><span>        headers<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#34;X-API-KEY&#34;</span>: API_KEY},
+</span></span><span style="display:flex;"><span>        use_json<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>,
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> Client(transport<span style="color:#f92672">=</span>transport, fetch_schema_from_transport<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_target_network</span>(client):
+</span></span><span style="display:flex;"><span>    response <span style="color:#f92672">=</span> client<span style="color:#f92672">.</span>execute(QUERY_REMOTE_NETWORKS)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> edge <span style="color:#f92672">in</span> response[<span style="color:#e6db74">&#34;remoteNetworks&#34;</span>][<span style="color:#e6db74">&#34;edges&#34;</span>]:
+</span></span><span style="display:flex;"><span>        network <span style="color:#f92672">=</span> edge[<span style="color:#e6db74">&#34;node&#34;</span>]
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> network[<span style="color:#e6db74">&#34;name&#34;</span>] <span style="color:#f92672">==</span> TARGET_NETWORK_NAME:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> network
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">None</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">create_resource</span>(client, name, address_value, remote_network_id):
+</span></span><span style="display:flex;"><span>    params <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;name&#34;</span>: name,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;address&#34;</span>: address_value,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;remoteNetworkId&#34;</span>: remote_network_id
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    response <span style="color:#f92672">=</span> client<span style="color:#f92672">.</span>execute(MUTATION_CREATE_RESOURCE, variable_values<span style="color:#f92672">=</span>params)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> response[<span style="color:#e6db74">&#34;resourceCreate&#34;</span>][<span style="color:#e6db74">&#34;ok&#34;</span>]:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">Exception</span>(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Failed to create resource: </span><span style="color:#e6db74">{</span>response[<span style="color:#e6db74">&#39;resourceCreate&#39;</span>][<span style="color:#e6db74">&#39;error&#39;</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> response[<span style="color:#e6db74">&#34;resourceCreate&#34;</span>][<span style="color:#e6db74">&#34;entity&#34;</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">automate_resource_creation</span>():
+</span></span><span style="display:flex;"><span>    client <span style="color:#f92672">=</span> setup_client()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Searching for target network: </span><span style="color:#e6db74">{</span>TARGET_NETWORK_NAME<span style="color:#e6db74">}</span><span style="color:#e6db74">...&#34;</span>)
+</span></span><span style="display:flex;"><span>    target_network <span style="color:#f92672">=</span> get_target_network(client)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> target_network:
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Network &#39;</span><span style="color:#e6db74">{</span>TARGET_NETWORK_NAME<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39; not found.&#34;</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Found network: </span><span style="color:#e6db74">{</span>target_network[<span style="color:#e6db74">&#39;name&#39;</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>    remote_network_id <span style="color:#f92672">=</span> target_network[<span style="color:#e6db74">&#39;id&#39;</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> connector_edge <span style="color:#f92672">in</span> target_network[<span style="color:#e6db74">&#34;connectors&#34;</span>][<span style="color:#e6db74">&#34;edges&#34;</span>]:
+</span></span><span style="display:flex;"><span>        connector <span style="color:#f92672">=</span> connector_edge[<span style="color:#e6db74">&#34;node&#34;</span>]
+</span></span><span style="display:flex;"><span>        public_ip <span style="color:#f92672">=</span> connector<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;publicIP&#34;</span>)
+</span></span><span style="display:flex;"><span>        private_ips <span style="color:#f92672">=</span> connector<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;privateIPs&#34;</span>, [])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> public_ip:
+</span></span><span style="display:flex;"><span>            resource_name <span style="color:#f92672">=</span> <span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Resource-Public-</span><span style="color:#e6db74">{</span>public_ip<span style="color:#f92672">.</span>replace(<span style="color:#e6db74">&#39;.&#39;</span>, <span style="color:#e6db74">&#39;-&#39;</span>)<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>            print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Creating Resource for public IP: </span><span style="color:#e6db74">{</span>public_ip<span style="color:#e6db74">}</span><span style="color:#e6db74">...&#34;</span>)
+</span></span><span style="display:flex;"><span>            resource <span style="color:#f92672">=</span> create_resource(client, resource_name, public_ip, remote_network_id)
+</span></span><span style="display:flex;"><span>            print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Resource created: </span><span style="color:#e6db74">{</span>resource[<span style="color:#e6db74">&#39;name&#39;</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74"> (ID: </span><span style="color:#e6db74">{</span>resource[<span style="color:#e6db74">&#39;id&#39;</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">, Address: </span><span style="color:#e6db74">{</span>resource[<span style="color:#e6db74">&#39;address&#39;</span>][<span style="color:#e6db74">&#39;value&#39;</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">)&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> private_ip <span style="color:#f92672">in</span> private_ips:
+</span></span><span style="display:flex;"><span>            resource_name <span style="color:#f92672">=</span> <span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Resource-Private-</span><span style="color:#e6db74">{</span>private_ip<span style="color:#f92672">.</span>replace(<span style="color:#e6db74">&#39;.&#39;</span>, <span style="color:#e6db74">&#39;-&#39;</span>)<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>            print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Creating Resource for private IP: </span><span style="color:#e6db74">{</span>private_ip<span style="color:#e6db74">}</span><span style="color:#e6db74">...&#34;</span>)
+</span></span><span style="display:flex;"><span>            resource <span style="color:#f92672">=</span> create_resource(client, resource_name, private_ip, remote_network_id)
+</span></span><span style="display:flex;"><span>            print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Resource created: </span><span style="color:#e6db74">{</span>resource[<span style="color:#e6db74">&#39;name&#39;</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74"> (ID: </span><span style="color:#e6db74">{</span>resource[<span style="color:#e6db74">&#39;id&#39;</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">, Address: </span><span style="color:#e6db74">{</span>resource[<span style="color:#e6db74">&#39;address&#39;</span>][<span style="color:#e6db74">&#39;value&#39;</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">)&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;__main__&#34;</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>        automate_resource_creation()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">Exception</span> <span style="color:#66d9ef">as</span> e:
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Error: </span><span style="color:#e6db74">{</span>e<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span></code></pre></div><ul>
+<li>Save the file.</li>
+</ul>
+<h4 id="now-well-create-a-python-virtual-environment">Now, we&rsquo;ll create a python virtual environment<a href="#now-well-create-a-python-virtual-environment" class="hanchor" ariaLabel="Anchor">#</a> </h4>
+<ul>
+<li>This will make sure we can install packages and prerequisites without hurting your other projects. (if you have some&hellip;.if you don&rsquo;t&hellip;that&rsquo;s okay&hellip;.it&rsquo;s just good practice)</li>
+<li>First make sure you have it installed. See below for Linux.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo apt install python3-venv -y
+</span></span></code></pre></div><ul>
+<li>Also make sure you install PIP</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo apt install python3-pip
+</span></span></code></pre></div><ul>
+<li>Now create a Python virtual environment and activate it.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>python3 -m venv twingatesomething
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>source twingatesomething/bin/activate
+</span></span></code></pre></div><ul>
+<li>Install the pre-reqs</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pip install gql requests requests.toolbelt
+</span></span></code></pre></div><ul>
+<li>Type to run the script</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>python3 twingate.py
+</span></span></code></pre></div><ul>
+<li>Check your resources in Twingate&hellip;you should see something cool</li>
+</ul>
+<p>!<img alt="Image Description" src="/images/Pasted%20image%2020241220115720.png"></p>
+
+      </div></div>
+
+  
+    
+<div class="pagination">
+  <div class="pagination__title">
+    <span class="pagination__title-h">Read other posts</span>
+    <hr />
+  </div>
+  <div class="pagination__buttons">
+    
+    
+    
+      <a href="/posts/i-built-a-phone-system-because-no-one-answers-me/" class="button inline next">
+        I Built a Phone System Because No One Answers Me
+      </a>
+    
+  </div>
+</div>
+
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2024 Powered by <a href="https://gohugo.io">Hugo</a></span>
+    
+      <span>:: <a href="https://github.com/panr/hugo-theme-terminal" target="_blank">Theme</a> made by <a href="https://github.com/panr" target="_blank">panr</a></span>
+      </div>
+  </div>
+</footer>
+
+
+
+
+
+
+<script type="text/javascript" src="/bundle.min.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>
