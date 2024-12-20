@@ -181,6 +181,69 @@
     
       <article class="post on-list">
         <h2 class="post-title">
+          <a href="/posts/building-a-hacker-dropbox-access-any-network/">Building a Hacker Dropbox (access any network)</a>
+        </h2>
+
+        <div class="post-meta"><time class="post-date">2024-12-20</time></div>
+
+        
+          <span class="post-tags">
+            
+            #<a href="/tags/networkchuck/">NetworkChuck</a>&nbsp;
+            
+          </span>
+        
+
+        
+
+
+        <div class="post-content">
+          
+            <h2 id="what-is-a-hacker-dropbox-and-why-you-need-oneeven-if-you-arent-a-hacker">What is a <em>Hacker Dropbox</em>? (and why you need one&hellip;.even if you aren&rsquo;t a hacker)</h2>
+<ul>
+<li>Here is a great definition from ChatGPT: <em>a small, discreet, and often portable device designed to be covertly placed in a target network to provide remote access for a hacker or penetration tester. It typically contains hardware and software configured to exploit the network or collect sensitive information.</em></li>
+<li>If you&rsquo;re a hacker&hellip;this is a no brainer. Get instant access to a remote network by dropping off a device. But&hellip;.if you&rsquo;re not a hacker&hellip;why do you need this?</li>
+</ul>
+<h3 id="family-helpdesk-support">Family HelpDesk Support</h3>
+<ul>
+<li>If you&rsquo;re like me, you are likely the official technical support for your family and friends. I also inherited the role of helpdesk support for my church&hellip;these kinds of things just happen by default when you are in tech and people find out about your technical skills.</li>
+<li>This isn&rsquo;t an easy thing to do, especially when it comes to troubleshooting networks for your family. Is the network up? Why is it slow? Sometimes a FaceTime call just isn&rsquo;t going to cut it.</li>
+<li>If I&rsquo;m going to be the support for my church and family, I&rsquo;m going to take my role seriously. I need FULL control of the remote network&hellip;&hellip;no more playing around!!!</li>
+<li>With the <em>Hacker Dropbox</em>, I can drop off a small device, in my case it&rsquo;s going to be a Raspberry Pi 4. (it can be a lot of things, as long as the device is Linux-based and is 64-bit). Instantly I get access to this remote network, enabling me to provide remote support and access any device.</li>
+</ul>
+<h3 id="this-is-not-vpn">This is NOT VPN</h3>
+<ul>
+<li>This is not a VPN (VIrtual Private Network) solution&hellip;.it&rsquo;s much better.</li>
+<li>This is a ZTNA (Zero-Trust Network Access) solution. It&rsquo;s called Twingate and I&rsquo;ve been using them for a long time in my business and personal networks. I talk more about them in the video above but in short, they allow you to get and give remote access to networks in the most secure way. They are used by everyone from large enterprises to homelabbers looking to access their Plex server.</li>
+<li>This isn&rsquo;t the first video I&rsquo;ve made about them but this is the first time I&rsquo;ve featured a use-case like this.</li>
+<li>Oh, it&rsquo;s also <strong>FREE</strong> for home labbers. (And&hellip;cough&hellip;.businesses that don&rsquo;t have a ton of employees&hellip;.like me.)</li>
+</ul>
+<h3 id="you-dont-need-to-know-anything-about-the-network">You don&rsquo;t need to know ANYTHING about the network</h3>
+<ul>
+<li>I wanted this to be a turnkey solution even if you don&rsquo;t know anything about the remote network. All you&rsquo;ll have to do is plug in an ethernet cable (or connect to wifi&hellip;.but you&rsquo;ll need to know the SSID and password) and you will know everything you need to know about that network&hellip;..but how?</li>
+<li>Twingate has a powerful API that allows us to do many things&hellip;including write python scripts that will automagically tell us the private IP address of our <em>Hacker Dropbox</em> (Raspberry Pi) and the Public IP address of the network, giving us instant access to this <em>Hacker Dropbox</em> AND the network.</li>
+<li>This guide will contain that script.</li>
+</ul>
+<h2 id="what-do-you-need">What do you need?</h2>
+<ul>
+<li>Any Linux-based 64-bit system will do. You&rsquo;ll need at least 1 CPU and 2GB RAM (recommended)&hellip;but you can go as low as 512MB of RAM.</li>
+<li>You can also run this as a Docker container, which is my favorite way to deploy this in my home lab.</li>
+<li>In this example, with the <em>Hacker Dropbox</em>, I&rsquo;m using a Raspberry Pi 4 running Raspberry Pi OS Lite - 64-bit and installing it directly on the system (no docker container)</li>
+</ul>
+<h3 id="what-other-hardware-options-do-i-have">What other hardware options do I have?</h3>
+<p>Again, this can be many things, but here are some ideas to get the juices flowing:</p>
+          
+        </div>
+
+        
+          <div>
+            <a class="read-more button inline" href="/posts/building-a-hacker-dropbox-access-any-network/">Read more</a>
+          </div>
+        
+      </article>
+    
+      <article class="post on-list">
+        <h2 class="post-title">
           <a href="/posts/i-built-a-phone-system-because-no-one-answers-me/">I Built a Phone System Because No One Answers Me</a>
         </h2>
 
@@ -520,41 +583,6 @@
         
           <div>
             <a class="read-more button inline" href="/posts/how-to-clone-a-voice/">Read more</a>
-          </div>
-        
-      </article>
-    
-      <article class="post on-list">
-        <h2 class="post-title">
-          <a href="/posts/a-new-post/">Just a test</a>
-        </h2>
-
-        <div class="post-meta"><time class="post-date">2024-11-15</time></div>
-
-        
-          <span class="post-tags">
-            
-            #<a href="/tags/tag1/">tag1</a>&nbsp;
-            
-            #<a href="/tags/tag2/">tag2</a>&nbsp;
-            
-          </span>
-        
-
-        
-
-
-        <div class="post-content">
-          
-            <h1 id="testing">Testing!!!</h1>
-<p>123</p>
-<p>!<img alt="Image Description" src="/images/Pasted%20image%2020241115182727.png"></p>
-          
-        </div>
-
-        
-          <div>
-            <a class="read-more button inline" href="/posts/a-new-post/">Read more</a>
           </div>
         
       </article>

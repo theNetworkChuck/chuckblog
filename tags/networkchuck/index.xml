@@ -6,7 +6,360 @@
     <description>Recent content in Networkchuck on Terminal</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 09 Dec 2024 00:00:00 +0000</lastBuildDate><atom:link href="/tags/networkchuck/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 20 Dec 2024 00:00:00 +0000</lastBuildDate><atom:link href="/tags/networkchuck/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Building a Hacker Dropbox (access any network)</title>
+      <link>/posts/building-a-hacker-dropbox-access-any-network/</link>
+      <pubDate>Fri, 20 Dec 2024 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/building-a-hacker-dropbox-access-any-network/</guid>
+      <description>&lt;h2 id=&#34;what-is-a-hacker-dropbox-and-why-you-need-oneeven-if-you-arent-a-hacker&#34;&gt;What is a &lt;em&gt;Hacker Dropbox&lt;/em&gt;? (and why you need one&amp;hellip;.even if you aren&amp;rsquo;t a hacker)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Here is a great definition from ChatGPT: &lt;em&gt;a small, discreet, and often portable device designed to be covertly placed in a target network to provide remote access for a hacker or penetration tester. It typically contains hardware and software configured to exploit the network or collect sensitive information.&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;If you&amp;rsquo;re a hacker&amp;hellip;this is a no brainer. Get instant access to a remote network by dropping off a device. But&amp;hellip;.if you&amp;rsquo;re not a hacker&amp;hellip;why do you need this?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;family-helpdesk-support&#34;&gt;Family HelpDesk Support&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;If you&amp;rsquo;re like me, you are likely the official technical support for your family and friends. I also inherited the role of helpdesk support for my church&amp;hellip;these kinds of things just happen by default when you are in tech and people find out about your technical skills.&lt;/li&gt;
+&lt;li&gt;This isn&amp;rsquo;t an easy thing to do, especially when it comes to troubleshooting networks for your family. Is the network up? Why is it slow? Sometimes a FaceTime call just isn&amp;rsquo;t going to cut it.&lt;/li&gt;
+&lt;li&gt;If I&amp;rsquo;m going to be the support for my church and family, I&amp;rsquo;m going to take my role seriously. I need FULL control of the remote network&amp;hellip;&amp;hellip;no more playing around!!!&lt;/li&gt;
+&lt;li&gt;With the &lt;em&gt;Hacker Dropbox&lt;/em&gt;, I can drop off a small device, in my case it&amp;rsquo;s going to be a Raspberry Pi 4. (it can be a lot of things, as long as the device is Linux-based and is 64-bit). Instantly I get access to this remote network, enabling me to provide remote support and access any device.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;this-is-not-vpn&#34;&gt;This is NOT VPN&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;This is not a VPN (VIrtual Private Network) solution&amp;hellip;.it&amp;rsquo;s much better.&lt;/li&gt;
+&lt;li&gt;This is a ZTNA (Zero-Trust Network Access) solution. It&amp;rsquo;s called Twingate and I&amp;rsquo;ve been using them for a long time in my business and personal networks. I talk more about them in the video above but in short, they allow you to get and give remote access to networks in the most secure way. They are used by everyone from large enterprises to homelabbers looking to access their Plex server.&lt;/li&gt;
+&lt;li&gt;This isn&amp;rsquo;t the first video I&amp;rsquo;ve made about them but this is the first time I&amp;rsquo;ve featured a use-case like this.&lt;/li&gt;
+&lt;li&gt;Oh, it&amp;rsquo;s also &lt;strong&gt;FREE&lt;/strong&gt; for home labbers. (And&amp;hellip;cough&amp;hellip;.businesses that don&amp;rsquo;t have a ton of employees&amp;hellip;.like me.)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;you-dont-need-to-know-anything-about-the-network&#34;&gt;You don&amp;rsquo;t need to know ANYTHING about the network&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;I wanted this to be a turnkey solution even if you don&amp;rsquo;t know anything about the remote network. All you&amp;rsquo;ll have to do is plug in an ethernet cable (or connect to wifi&amp;hellip;.but you&amp;rsquo;ll need to know the SSID and password) and you will know everything you need to know about that network&amp;hellip;..but how?&lt;/li&gt;
+&lt;li&gt;Twingate has a powerful API that allows us to do many things&amp;hellip;including write python scripts that will automagically tell us the private IP address of our &lt;em&gt;Hacker Dropbox&lt;/em&gt; (Raspberry Pi) and the Public IP address of the network, giving us instant access to this &lt;em&gt;Hacker Dropbox&lt;/em&gt; AND the network.&lt;/li&gt;
+&lt;li&gt;This guide will contain that script.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;what-do-you-need&#34;&gt;What do you need?&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Any Linux-based 64-bit system will do. You&amp;rsquo;ll need at least 1 CPU and 2GB RAM (recommended)&amp;hellip;but you can go as low as 512MB of RAM.&lt;/li&gt;
+&lt;li&gt;You can also run this as a Docker container, which is my favorite way to deploy this in my home lab.&lt;/li&gt;
+&lt;li&gt;In this example, with the &lt;em&gt;Hacker Dropbox&lt;/em&gt;, I&amp;rsquo;m using a Raspberry Pi 4 running Raspberry Pi OS Lite - 64-bit and installing it directly on the system (no docker container)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;what-other-hardware-options-do-i-have&#34;&gt;What other hardware options do I have?&lt;/h3&gt;
+&lt;p&gt;Again, this can be many things, but here are some ideas to get the juices flowing:&lt;/p&gt;</description>
+      <content>&lt;h2 id=&#34;what-is-a-hacker-dropbox-and-why-you-need-oneeven-if-you-arent-a-hacker&#34;&gt;What is a &lt;em&gt;Hacker Dropbox&lt;/em&gt;? (and why you need one&amp;hellip;.even if you aren&amp;rsquo;t a hacker)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Here is a great definition from ChatGPT: &lt;em&gt;a small, discreet, and often portable device designed to be covertly placed in a target network to provide remote access for a hacker or penetration tester. It typically contains hardware and software configured to exploit the network or collect sensitive information.&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;If you&amp;rsquo;re a hacker&amp;hellip;this is a no brainer. Get instant access to a remote network by dropping off a device. But&amp;hellip;.if you&amp;rsquo;re not a hacker&amp;hellip;why do you need this?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;family-helpdesk-support&#34;&gt;Family HelpDesk Support&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;If you&amp;rsquo;re like me, you are likely the official technical support for your family and friends. I also inherited the role of helpdesk support for my church&amp;hellip;these kinds of things just happen by default when you are in tech and people find out about your technical skills.&lt;/li&gt;
+&lt;li&gt;This isn&amp;rsquo;t an easy thing to do, especially when it comes to troubleshooting networks for your family. Is the network up? Why is it slow? Sometimes a FaceTime call just isn&amp;rsquo;t going to cut it.&lt;/li&gt;
+&lt;li&gt;If I&amp;rsquo;m going to be the support for my church and family, I&amp;rsquo;m going to take my role seriously. I need FULL control of the remote network&amp;hellip;&amp;hellip;no more playing around!!!&lt;/li&gt;
+&lt;li&gt;With the &lt;em&gt;Hacker Dropbox&lt;/em&gt;, I can drop off a small device, in my case it&amp;rsquo;s going to be a Raspberry Pi 4. (it can be a lot of things, as long as the device is Linux-based and is 64-bit). Instantly I get access to this remote network, enabling me to provide remote support and access any device.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;this-is-not-vpn&#34;&gt;This is NOT VPN&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;This is not a VPN (VIrtual Private Network) solution&amp;hellip;.it&amp;rsquo;s much better.&lt;/li&gt;
+&lt;li&gt;This is a ZTNA (Zero-Trust Network Access) solution. It&amp;rsquo;s called Twingate and I&amp;rsquo;ve been using them for a long time in my business and personal networks. I talk more about them in the video above but in short, they allow you to get and give remote access to networks in the most secure way. They are used by everyone from large enterprises to homelabbers looking to access their Plex server.&lt;/li&gt;
+&lt;li&gt;This isn&amp;rsquo;t the first video I&amp;rsquo;ve made about them but this is the first time I&amp;rsquo;ve featured a use-case like this.&lt;/li&gt;
+&lt;li&gt;Oh, it&amp;rsquo;s also &lt;strong&gt;FREE&lt;/strong&gt; for home labbers. (And&amp;hellip;cough&amp;hellip;.businesses that don&amp;rsquo;t have a ton of employees&amp;hellip;.like me.)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;you-dont-need-to-know-anything-about-the-network&#34;&gt;You don&amp;rsquo;t need to know ANYTHING about the network&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;I wanted this to be a turnkey solution even if you don&amp;rsquo;t know anything about the remote network. All you&amp;rsquo;ll have to do is plug in an ethernet cable (or connect to wifi&amp;hellip;.but you&amp;rsquo;ll need to know the SSID and password) and you will know everything you need to know about that network&amp;hellip;..but how?&lt;/li&gt;
+&lt;li&gt;Twingate has a powerful API that allows us to do many things&amp;hellip;including write python scripts that will automagically tell us the private IP address of our &lt;em&gt;Hacker Dropbox&lt;/em&gt; (Raspberry Pi) and the Public IP address of the network, giving us instant access to this &lt;em&gt;Hacker Dropbox&lt;/em&gt; AND the network.&lt;/li&gt;
+&lt;li&gt;This guide will contain that script.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;what-do-you-need&#34;&gt;What do you need?&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Any Linux-based 64-bit system will do. You&amp;rsquo;ll need at least 1 CPU and 2GB RAM (recommended)&amp;hellip;but you can go as low as 512MB of RAM.&lt;/li&gt;
+&lt;li&gt;You can also run this as a Docker container, which is my favorite way to deploy this in my home lab.&lt;/li&gt;
+&lt;li&gt;In this example, with the &lt;em&gt;Hacker Dropbox&lt;/em&gt;, I&amp;rsquo;m using a Raspberry Pi 4 running Raspberry Pi OS Lite - 64-bit and installing it directly on the system (no docker container)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;what-other-hardware-options-do-i-have&#34;&gt;What other hardware options do I have?&lt;/h3&gt;
+&lt;p&gt;Again, this can be many things, but here are some ideas to get the juices flowing:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;ZImaboard&lt;/li&gt;
+&lt;li&gt;Raspberry Pi 4/5&lt;/li&gt;
+&lt;li&gt;Raspberry Pi 400/500&lt;/li&gt;
+&lt;li&gt;Old laptops&lt;/li&gt;
+&lt;li&gt;NAS&lt;/li&gt;
+&lt;li&gt;Intel NUC or other mini-pcs&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;the-tutorial&#34;&gt;The Tutorial&lt;/h1&gt;
+&lt;h2 id=&#34;step-1---setup-twingate&#34;&gt;Step 1 - Setup Twingate&lt;/h2&gt;
+&lt;p&gt;This setup is VERY easy and is all done in the cloud.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Sign up for Twingate here: &lt;a href=&#34;https://ntck.co/twingate_ztna&#34;&gt;https://ntck.co/twingate_ztna&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;You&amp;rsquo;ll create a new Twingate network&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;!&lt;img alt=&#34;Image Description&#34; src=&#34;/images/Pasted%20image%2020241220112613.png&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;step-2---add-your-first-remote-network&#34;&gt;Step 2 - Add your first remote network&lt;/h2&gt;
+&lt;p&gt;You will be prompted to go through a wizard, we can skip that for now.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Click on &lt;em&gt;Remote Networks&lt;/em&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;!&lt;img alt=&#34;Image Description&#34; src=&#34;/images/Pasted%20image%2020241220112739.png&#34;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;And then add a &lt;em&gt;Remote Network&lt;/em&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;!&lt;img alt=&#34;Image Description&#34; src=&#34;/images/Pasted%20image%2020241220112803.png&#34;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Choose &lt;em&gt;on-premise&lt;/em&gt; for location&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;!&lt;img alt=&#34;Image Description&#34; src=&#34;/images/Pasted%20image%2020241220112825.png&#34;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Once created, we&amp;rsquo;ll click on the remote network link to jump in and add more config&amp;hellip;like adding a connector.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;!&lt;img alt=&#34;Image Description&#34; src=&#34;/images/Pasted%20image%2020241220112905.png&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;step-25---prep-your-hacker-dropbox&#34;&gt;Step 2.5 - Prep your &lt;em&gt;Hacker Dropbox&lt;/em&gt;&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;This will vary based on what device you choose but this will normally involve installing a compatible OS (64-bit Linux OS) and getting access to your device via CLI.&lt;/li&gt;
+&lt;li&gt;I demo flashing an SD-card for the Raspberry Pi 4 in the video.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;step-3---adding-a-connector-for-your-remote-network&#34;&gt;Step 3 - Adding a connector for your remote network&lt;/h2&gt;
+&lt;p&gt;The connector, in our case, will be the &lt;em&gt;Hacker Dropbox&lt;/em&gt;, a linux-based device running Twingate software, aka, &lt;em&gt;The Connector&lt;/em&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Click on &lt;em&gt;Deploy Connector&lt;/em&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;!&lt;img alt=&#34;Image Description&#34; src=&#34;/images/Pasted%20image%2020241220113010.png&#34;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Good practice, run &lt;code&gt;sudo apt update&lt;/code&gt; to make sure all your repos are up-to-date (this will different for you if you are running something that isn&amp;rsquo;t Debian-based)&lt;/li&gt;
+&lt;li&gt;For the Raspberry Pi example, we are installing the Twingate connector directly on the OS, no container. So we&amp;rsquo;ll select Linux as our option.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;!&lt;img alt=&#34;Image Description&#34; src=&#34;/images/Pasted%20image%2020241220113353.png&#34;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Now, generate your access tokens. These will automatically be added the command we&amp;rsquo;ll use to install Twingate here in a moment.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;!&lt;img alt=&#34;Image Description&#34; src=&#34;/images/Pasted%20image%2020241220113428.png&#34;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Copy the provided command&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;!&lt;img alt=&#34;Image Description&#34; src=&#34;/images/Pasted%20image%2020241220113458.png&#34;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Paste that command in your terminal and watch the magic happen.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;!&lt;img alt=&#34;Image Description&#34; src=&#34;/images/Pasted%20image%2020241220113521.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;!&lt;img alt=&#34;Image Description&#34; src=&#34;/images/Pasted%20image%2020241220113536.png&#34;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;We are actually&amp;hellip;.done. Check Twingate to see if your connector is up.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;!&lt;img alt=&#34;Image Description&#34; src=&#34;/images/Pasted%20image%2020241220113621.png&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;step-4---add-a-remote-wifi-network-if-not-using-ethernet&#34;&gt;Step 4 - Add a remote WiFi Network (if not using ethernet)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;This will be Raspberry Pi specific.&lt;/li&gt;
+&lt;li&gt;Run this command to access the NetworkManager TUI&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo nmtui
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;Edit a connection&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;!&lt;img alt=&#34;Image Description&#34; src=&#34;/images/Pasted%20image%2020241220113842.png&#34;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Select Add&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;!&lt;img alt=&#34;Image Description&#34; src=&#34;/images/Pasted%20image%2020241220113856.png&#34;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Select WiFi&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;!&lt;img alt=&#34;Image Description&#34; src=&#34;/images/Pasted%20image%2020241220113917.png&#34;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Add SSID and Password (you&amp;rsquo;ll need to know this for the remote network)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;!&lt;img alt=&#34;Image Description&#34; src=&#34;/images/Pasted%20image%2020241220113943.png&#34;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Select &lt;em&gt;Ok&lt;/em&gt; and then hit &lt;em&gt;ESC&lt;/em&gt; to save and get out of there.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;step-5---use-the-twingate-api-to-learn-about-the-remote-network&#34;&gt;Step 5 - Use the Twingate API to learn about the remote network&lt;/h2&gt;
+&lt;p&gt;You only need this option if this is a network you are unfamiliar with. So, for example, you might be offering remote support for your family and you will likely already know their network, 192.168.1.0/24 (for example) and you may have set the static IP address of your &lt;em&gt;Hacker Dropbox&lt;/em&gt; and can easily, manually add this as a resource in Twingate.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Generate an API token&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;!&lt;img alt=&#34;Image Description&#34; src=&#34;/images/Pasted%20image%2020241220114238.png&#34;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Our script will be provisioning resources so we&amp;rsquo;ll need to give it a good amount of access.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;!&lt;img alt=&#34;Image Description&#34; src=&#34;/images/Pasted%20image%2020241220114315.png&#34;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Copy that key and put it somewhere safe.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;!&lt;img alt=&#34;Image Description&#34; src=&#34;/images/Pasted%20image%2020241220114347.png&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;run-the-python-script&#34;&gt;Run the Python Script&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;You&amp;rsquo;ll need another computer, can be anything that can run Python. (which&amp;hellip;can be anything, Windows, Mac, Linux.)&lt;/li&gt;
+&lt;li&gt;You&amp;rsquo;ll also need Python3 installed, refer to your OS-specific documentation to install Python.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;create-the-script&#34;&gt;Create the script&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;Create a new python script&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nano twingate.py
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;paste the following script&lt;/li&gt;
+&lt;li&gt;Replace the following variables:
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;API_URL&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;API_KEY&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;TARGET_NETWORK_NAME&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; gql &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; gql, Client
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; gql.transport.requests &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; RequestsHTTPTransport
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Twingate API settings&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;API_URL &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;https://****your Twingate network here****.twingate.com/api/graphql/&amp;#34;&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;# Replace &amp;lt;subdomain&amp;gt; with your Twingate subdomain&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;API_KEY &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;YOUR TWINGATE API KEY&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;TARGET_NETWORK_NAME &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;YOUR REMOTE NETWORK&amp;#34;&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;# Replace with your target network name&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;QUERY_REMOTE_NETWORKS &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; gql(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;#34;&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;query GetRemoteNetworkDetails {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;  remoteNetworks(after: null, first: 10) {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    edges {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;      node {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        id
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        name
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        connectors {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;          edges {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;            node {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;              id
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;              name
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;              publicIP
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;              privateIPs
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;              remoteNetwork {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;                id
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;                name
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;              }
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;            }
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;          }
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;      }
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;  }
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;MUTATION_CREATE_RESOURCE &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; gql(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;#34;&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;mutation CreateResource($name: String!, $address: String!, $remoteNetworkId: ID!) {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;  resourceCreate(
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    name: $name,
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    address: $address,
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    remoteNetworkId: $remoteNetworkId
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;  ) {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    ok
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    error
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    entity {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;      id
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;      name
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;      address {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        type
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        value
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;      }
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;  }
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;setup_client&lt;/span&gt;():
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    transport &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; RequestsHTTPTransport(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        url&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;API_URL,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        headers&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;{&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;X-API-KEY&amp;#34;&lt;/span&gt;: API_KEY},
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        use_json&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;True&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    )
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; Client(transport&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;transport, fetch_schema_from_transport&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;True&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;get_target_network&lt;/span&gt;(client):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    response &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; client&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;execute(QUERY_REMOTE_NETWORKS)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; edge &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; response[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;remoteNetworks&amp;#34;&lt;/span&gt;][&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;edges&amp;#34;&lt;/span&gt;]:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        network &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; edge[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;node&amp;#34;&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; network[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; TARGET_NETWORK_NAME:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; network
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;None&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;create_resource&lt;/span&gt;(client, name, address_value, remote_network_id):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    params &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;: name,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;address&amp;#34;&lt;/span&gt;: address_value,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;remoteNetworkId&amp;#34;&lt;/span&gt;: remote_network_id
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    response &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; client&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;execute(MUTATION_CREATE_RESOURCE, variable_values&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;params)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; response[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;resourceCreate&amp;#34;&lt;/span&gt;][&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;ok&amp;#34;&lt;/span&gt;]:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;raise&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Exception&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Failed to create resource: &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;response[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;resourceCreate&amp;#39;&lt;/span&gt;][&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;error&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; response[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;resourceCreate&amp;#34;&lt;/span&gt;][&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;entity&amp;#34;&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;automate_resource_creation&lt;/span&gt;():
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    client &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; setup_client()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    print(&lt;span style=&#34;color:#e6db74&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Searching for target network: &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;TARGET_NETWORK_NAME&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;...&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    target_network &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; get_target_network(client)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; target_network:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        print(&lt;span style=&#34;color:#e6db74&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Network &amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;TARGET_NETWORK_NAME&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39; not found.&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    print(&lt;span style=&#34;color:#e6db74&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Found network: &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;target_network[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;name&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    remote_network_id &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; target_network[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;id&amp;#39;&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; connector_edge &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; target_network[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;connectors&amp;#34;&lt;/span&gt;][&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;edges&amp;#34;&lt;/span&gt;]:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        connector &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; connector_edge[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;node&amp;#34;&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        public_ip &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; connector&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;publicIP&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        private_ips &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; connector&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;privateIPs&amp;#34;&lt;/span&gt;, [])
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; public_ip:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            resource_name &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Resource-Public-&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;public_ip&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;replace(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;.&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;-&amp;#39;&lt;/span&gt;)&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            print(&lt;span style=&#34;color:#e6db74&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Creating Resource for public IP: &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;public_ip&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;...&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            resource &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; create_resource(client, resource_name, public_ip, remote_network_id)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            print(&lt;span style=&#34;color:#e6db74&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Resource created: &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;resource[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;name&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; (ID: &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;resource[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;id&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;, Address: &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;resource[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;address&amp;#39;&lt;/span&gt;][&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;value&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;)&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; private_ip &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; private_ips:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            resource_name &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Resource-Private-&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;private_ip&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;replace(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;.&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;-&amp;#39;&lt;/span&gt;)&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            print(&lt;span style=&#34;color:#e6db74&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Creating Resource for private IP: &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;private_ip&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;...&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            resource &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; create_resource(client, resource_name, private_ip, remote_network_id)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            print(&lt;span style=&#34;color:#e6db74&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Resource created: &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;resource[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;name&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; (ID: &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;resource[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;id&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;, Address: &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;resource[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;address&amp;#39;&lt;/span&gt;][&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;value&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;)&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; __name__ &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;__main__&amp;#34;&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;try&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        automate_resource_creation()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;except&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Exception&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; e:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        print(&lt;span style=&#34;color:#e6db74&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Error: &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;e&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;Save the file.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;now-well-create-a-python-virtual-environment&#34;&gt;Now, we&amp;rsquo;ll create a python virtual environment&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;This will make sure we can install packages and prerequisites without hurting your other projects. (if you have some&amp;hellip;.if you don&amp;rsquo;t&amp;hellip;that&amp;rsquo;s okay&amp;hellip;.it&amp;rsquo;s just good practice)&lt;/li&gt;
+&lt;li&gt;First make sure you have it installed. See below for Linux.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo apt install python3-venv -y
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;Also make sure you install PIP&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo apt install python3-pip
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;Now create a Python virtual environment and activate it.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;python3 -m venv twingatesomething
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;source twingatesomething/bin/activate
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;Install the pre-reqs&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pip install gql requests requests.toolbelt
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;Type to run the script&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;python3 twingate.py
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;Check your resources in Twingate&amp;hellip;you should see something cool&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;!&lt;img alt=&#34;Image Description&#34; src=&#34;/images/Pasted%20image%2020241220115720.png&#34;&gt;&lt;/p&gt;
+</content>
+    </item>
+    
     <item>
       <title>I Built a Phone System Because No One Answers Me</title>
       <link>/posts/i-built-a-phone-system-because-no-one-answers-me/</link>
