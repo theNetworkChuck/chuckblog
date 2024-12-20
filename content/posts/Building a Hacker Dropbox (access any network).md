@@ -5,6 +5,12 @@ draft: false
 tags:
   - NetworkChuck
 ---
+
+!![Image Description](/images/Pasted%20image%2020241220120201.png)
+
+
+The video: https://youtu.be/1lZ3FQSv-wI?si=-Poh5YhiymhGK5cH
+
 ## What is a *Hacker Dropbox*? (and why you need one....even if you aren't a hacker)
 
 - Here is a great definition from ChatGPT: *a small, discreet, and often portable device designed to be covertly placed in a target network to provide remote access for a hacker or penetration tester. It typically contains hardware and software configured to exploit the network or collect sensitive information.*
