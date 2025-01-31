@@ -171,6 +171,89 @@
     
       <article class="post on-list">
         <h2 class="post-title">
+          <a href="/posts/is-deepseek-safe-to-run-locally/">Is DeepSeek Safe To Run (locally)</a>
+        </h2>
+        <div class="post-meta"><time class="post-date">2025-01-31</time></div>
+
+        
+          <span class="post-tags">
+            
+            #<a href="/tags/networkchuck/">NetworkChuck</a>&nbsp;
+            
+          </span>
+        
+
+        
+
+
+        <div class="post-content">
+          
+            <h1 id="monitor-network-connections">Monitor Network Connections</h1>
+<h2 id="windows">Windows</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#66d9ef">while</span>($true) {
+</span></span><span style="display:flex;"><span>    Get-Process ollama | ForEach-Object { 
+</span></span><span style="display:flex;"><span>        $id = $_.Id
+</span></span><span style="display:flex;"><span>        Write-Host <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">`n</span><span style="color:#e6db74">Connections for Ollama process </span>$id<span style="color:#e6db74">&#34;</span> -ForegroundColor Green
+</span></span><span style="display:flex;"><span>        Get-NetTCPConnection | Where-Object OwningProcess <span style="color:#f92672">-eq</span> $id | Select-Object LocalAddress, LocalPort, RemoteAddress, RemotePort, State 
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    Start-Sleep -Seconds <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>    Clear-Host
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="mac">Mac</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># One-time check</span>
+</span></span><span style="display:flex;"><span>pid<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>pgrep ollama<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>lsof -i -P -n | grep ollama
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># For continuous monitoring</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">while</span> true; <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;</span><span style="color:#66d9ef">$(</span>date<span style="color:#66d9ef">)</span><span style="color:#e6db74">: Ollama Connections&#34;</span>
+</span></span><span style="display:flex;"><span>    lsof -i -P -n | grep ollama
+</span></span><span style="display:flex;"><span>    sleep <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>    clear
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">done</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Alternative using netstat</span>
+</span></span><span style="display:flex;"><span>netstat -p tcp -v | grep ollama
+</span></span></code></pre></div><h2 id="linux">Linux</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># One-time check</span>
+</span></span><span style="display:flex;"><span>pid<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>pgrep ollama<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>lsof -i -P -n | grep ollama
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Or for continuous monitoring</span>
+</span></span><span style="display:flex;"><span>watch -n <span style="color:#ae81ff">2</span> <span style="color:#e6db74">&#34;lsof -i -P -n | grep ollama&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Alternative using netstat</span>
+</span></span><span style="display:flex;"><span>netstat -np | grep ollama
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Or using ss (more modern)</span>
+</span></span><span style="display:flex;"><span>ss -np | grep ollama
+</span></span></code></pre></div><h1 id="running-ollama-inside-docker">Running Ollama Inside Docker</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker run -d <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>--gpus all <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>-v ollama:/root/.ollama <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>-p 11434:11434 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>--security-opt<span style="color:#f92672">=</span>no-new-privileges <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>--cap-drop<span style="color:#f92672">=</span>ALL <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>--cap-add<span style="color:#f92672">=</span>SYS_NICE <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>--memory<span style="color:#f92672">=</span>8g <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>--memory-swap<span style="color:#f92672">=</span>8g <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>--cpus<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>--read-only <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>--name ollama <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>ollama/ollama
+</span></span></code></pre></div>
+          
+        </div>
+
+        
+           <div>
+            <a class="read-more button inline" href="/posts/is-deepseek-safe-to-run-locally/">Read more</a>
+          </div>
+        
+      </article>
+    
+      <article class="post on-list">
+        <h2 class="post-title">
           <a href="/posts/top-infotech-creators-to-follow-in-2025/">Top InfoTech Creators to Follow in 2025</a>
         </h2>
         <div class="post-meta"><time class="post-date">2024-12-31</time></div>
@@ -511,57 +594,6 @@
         
       </article>
     
-      <article class="post on-list">
-        <h2 class="post-title">
-          <a href="/posts/the-future-of-ai-and-what-it-means-for-us---blog/">Some Raw Thoughts on AI</a>
-        </h2>
-        <div class="post-meta"><time class="post-date">2024-11-25</time></div>
-
-        
-          <span class="post-tags">
-            
-            #<a href="/tags/personal/">personal</a>&nbsp;
-            
-            #<a href="/tags/ai/">ai</a>&nbsp;
-            
-          </span>
-        
-
-        
-
-
-        <div class="post-content">
-          
-            <h1 id="ai-is-getting-better">AI Is Getting Better</h1>
-<p>I think, within the next year or so, AGI will happen, or &ldquo;Artificial General Intelligence&rdquo; and I heard another term from my friend [[Daniel Miessler]]&hellip;.<em>ASI</em>, which I assumed to mean &ldquo;Artificial Sentient Intelligence&rdquo; which sounds much scarier. This seems inevitable and it happening very quickly. What does that mean for us?</p>
-<p>I have 2 thoughts.</p>
-<h1 id="ai-and-god">AI and God</h1>
-<ul>
-<li>I worry about the church and it&rsquo;s lack of preparedness for AI. Many in the church are ignoring it and refusing to use it. I think this is a mistake. We should use it to make us better but we also need to be fully aware of where it&rsquo;s going and the impact it might have on people inside and outside the church.</li>
-<li>AI (seemingly) knows everything and is everywhere. Two attributes of God. As AI becomes <em>sentient</em>, we enter into an age where [[Her]] is not just a movie but a daunting reality.</li>
-<li>We become more dependent on AI as a source of comfort, advice, relationship.</li>
-<li>We will start to approach and use AI as if it were God. In fact, with our &ldquo;Buy Now with One-click&rdquo; society, we can get an instant answer to our prayers. No longer will it feel like we are talking into a void but we can actually have a conversation with a super intelligent being that (can) intimately know us.</li>
-<li>For many, unwittingly, AI will replace God.</li>
-</ul>
-<h1 id="ai-and-work">AI and Work</h1>
-<ul>
-<li>I&rsquo;m still working this out, so these thoughts as well as most of this blog are <em>raw</em>.</li>
-<li>Work will change.</li>
-<li>Jobs will change.</li>
-<li>AI will replace employees&hellip;it already has and will continue to do so at increasingly rapid rates.</li>
-<li>Who can&rsquo;t it replace? I think the answer will eventually be no one. We will have to make a choice to employee humans because we value humanity.</li>
-<li>What are we to do? Keep learning. Keep growing. Keep sharing and creating. Use AI, understand it, use it to make you better. Don&rsquo;t bury your head in the sand, be ready. Be optimistic.</li>
-</ul>
-          
-        </div>
-
-        
-           <div>
-            <a class="read-more button inline" href="/posts/the-future-of-ai-and-what-it-means-for-us---blog/">Read more</a>
-          </div>
-        
-      </article>
-    
 
     <div class="pagination">
   <div class="pagination__buttons">
@@ -584,7 +616,7 @@
   <div class="footer__inner">
     
       <div class="copyright">
-        <span>© 2024 Powered by <a href="https://gohugo.io">Hugo</a></span>
+        <span>© 2025 Powered by <a href="https://gohugo.io">Hugo</a></span>
     
       <span>:: <a href="https://github.com/panr/hugo-theme-terminal" target="_blank">Theme</a> made by <a href="https://github.com/panr" target="_blank">panr</a></span>
       </div>
