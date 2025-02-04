@@ -11,7 +11,7 @@ paginate = 5
   contentTypeName = "posts"
 
   # if you set this to 0, only submenu trigger will be visible
-  showMenuItems = 2
+  showMenuItems = 1 # 2 if you have the showcase menu engaged
 
   # show selector to switch language
   showLanguageSelector = false
@@ -82,7 +82,7 @@ paginate = 5
           identifier = "about"
           name = "About"
           url = "/about"
-        [[languages.en.menu.main]]
-          identifier = "showcase"
-          name = "Showcase"
-          url = "/showcase"
+       # [[languages.en.menu.main]]
+        #  identifier = "showcase"
+        # name = "Showcase"
+        #  url = "/showcase"
