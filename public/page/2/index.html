@@ -181,6 +181,175 @@
     
       <article class="post on-list">
         <h2 class="post-title">
+          <a href="/posts/create-a-solana-token/">Creating a Solana Token</a>
+        </h2>
+
+        <div class="post-meta"><time class="post-date">2024-12-04</time></div>
+
+        
+          <span class="post-tags">
+            
+            #<a href="/tags/networkchuck/">NetworkChuck</a>&nbsp;
+            
+          </span>
+        
+
+        
+
+
+        <div class="post-content">
+          
+            <h1 id="what-do-you-need">What Do You Need?</h1>
+<h2 id="a-computerand-a-terminal">A computer&hellip;and a terminal</h2>
+<ul>
+<li>Mac, Windows, Linux&hellip;it doesn&rsquo;t matter.
+<ul>
+<li><em>On Windows, we will be using WSL2&hellip;what is that? Check it out here &mdash;-&gt; <a href="https://youtu.be/vxTW22y8zV8?si=qzu9YrxSFFnXwSLM">https://youtu.be/vxTW22y8zV8?si=qzu9YrxSFFnXwSLM</a></em></li>
+</ul>
+</li>
+</ul>
+<p>!<img alt="Image Description" src="/images/Pasted%20image%2020241204104328.png"></p>
+<h2 id="docker">Docker</h2>
+<ul>
+<li>Docker is my favorite way to deploy pretty much anything. It&rsquo;s available on all platforms and very easy to install.</li>
+</ul>
+<h3 id="mac---docker-install">Mac - Docker Install</h3>
+<ul>
+<li>Link: <a href="https://docs.docker.com/desktop/setup/install/mac-install/">https://docs.docker.com/desktop/setup/install/mac-install/</a></li>
+</ul>
+<h3 id="linuxwindows-wsl---docker-install">Linux/Windows (WSL) - Docker Install</h3>
+<ul>
+<li><a href="https://docs.docker.com/engine/install/">https://docs.docker.com/engine/install/</a> (link for all other distros)</li>
+<li>If you are using Ubuntu (primary OS or WSL), do this:
+<ul>
+<li>here is the link to documentation: <a href="https://docs.docker.com/engine/install/ubuntu/">https://docs.docker.com/engine/install/ubuntu/</a></li>
+</ul>
+</li>
+</ul>
+<h4 id="setup-dockers-apt-repo">Setup Docker&rsquo;s apt repo</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Add Docker&#39;s official GPG key:</span>
+</span></span><span style="display:flex;"><span>sudo apt-get update
+</span></span><span style="display:flex;"><span>sudo apt-get install ca-certificates curl
+</span></span><span style="display:flex;"><span>sudo install -m <span style="color:#ae81ff">0755</span> -d /etc/apt/keyrings
+</span></span><span style="display:flex;"><span>sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+</span></span><span style="display:flex;"><span>sudo chmod a+r /etc/apt/keyrings/docker.asc
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Add the repository to Apt sources:</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  <span style="color:#e6db74">&#34;deb [arch=</span><span style="color:#66d9ef">$(</span>dpkg --print-architecture<span style="color:#66d9ef">)</span><span style="color:#e6db74"> signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  </span><span style="color:#66d9ef">$(</span>. /etc/os-release <span style="color:#f92672">&amp;&amp;</span> echo <span style="color:#e6db74">&#34;</span>$VERSION_CODENAME<span style="color:#e6db74">&#34;</span><span style="color:#66d9ef">)</span><span style="color:#e6db74"> stable&#34;</span> | <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  sudo tee /etc/apt/sources.list.d/docker.list &gt; /dev/null
+</span></span><span style="display:flex;"><span>sudo apt-get update
+</span></span></code></pre></div><h4 id="install-the-latest-docker-version">Install the latest Docker version</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+</span></span></code></pre></div><h4 id="make-sure-it-works">Make sure it works</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo docker run hello-world
+</span></span></code></pre></div><h1 id="setup-the-solana-docker-container">Setup the Solana Docker Container</h1>
+<h2 id="create-a-new-folder-for-your-token-project">Create a new folder for your token project</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mkdir your-token-name
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## jump in there</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>cd  your-token-name
+</span></span></code></pre></div><h2 id="create-a-dockerfile">Create a Dockerfile</h2>
+<ul>
+<li>This will walk you through how to create a Dockerfile, a file that will help you create your own Docker image.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">## Use nano to create a file</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>nano Dockerfile
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## Copy and paste the Dockerfile code below. Use ctrl-x-enter to save.</span>
+</span></span></code></pre></div><h3 id="dockerfile">Dockerfile</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Use a lightweight base image</span>
+</span></span><span style="display:flex;"><span>FROM debian:bullseye-slim
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Set non-interactive frontend for apt</span>
+</span></span><span style="display:flex;"><span>ENV DEBIAN_FRONTEND<span style="color:#f92672">=</span>noninteractive
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Install required dependencies and Rust</span>
+</span></span><span style="display:flex;"><span>RUN apt-get update <span style="color:#f92672">&amp;&amp;</span> apt-get install -y <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    curl build-essential libssl-dev pkg-config nano <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    <span style="color:#f92672">&amp;&amp;</span> curl --proto <span style="color:#e6db74">&#39;=https&#39;</span> --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    <span style="color:#f92672">&amp;&amp;</span> apt-get clean <span style="color:#f92672">&amp;&amp;</span> rm -rf /var/lib/apt/lists/*
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Add Rust to PATH</span>
+</span></span><span style="display:flex;"><span>ENV PATH<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/root/.cargo/bin:</span>$PATH<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Verify Rust installation</span>
+</span></span><span style="display:flex;"><span>RUN rustc --version
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Install Solana CLI</span>
+</span></span><span style="display:flex;"><span>RUN curl -sSfL https://release.anza.xyz/stable/install | sh <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    <span style="color:#f92672">&amp;&amp;</span> echo <span style="color:#e6db74">&#39;export PATH=&#34;$HOME/.local/share/solana/install/active_release/bin:$PATH&#34;&#39;</span> &gt;&gt; ~/.bashrc
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Add Solana CLI to PATH</span>
+</span></span><span style="display:flex;"><span>ENV PATH<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/root/.local/share/solana/install/active_release/bin:</span>$PATH<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Verify Solana CLI installation</span>
+</span></span><span style="display:flex;"><span>RUN solana --version
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Set up Solana config for Devnet</span>
+</span></span><span style="display:flex;"><span>RUN solana config set -ud
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Set working directory</span>
+</span></span><span style="display:flex;"><span>WORKDIR /solana-token
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Default command to run a shell</span>
+</span></span><span style="display:flex;"><span>CMD <span style="color:#f92672">[</span><span style="color:#e6db74">&#34;/bin/bash&#34;</span><span style="color:#f92672">]</span>
+</span></span></code></pre></div><h2 id="build-the-docker-image">Build the Docker Image</h2>
+<ul>
+<li>We&rsquo;re building our Docker image now with the Dockerfile we just created. We&rsquo;re naming the image <em>heysolana</em></li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker build -t heysolana .
+</span></span></code></pre></div><h2 id="run-the-container">Run the Container</h2>
+<ul>
+<li>Now we are creating a docker container with this image (and running it). Using the <em>-it</em> switch will throw us right into the container.</li>
+<li>The <em>-v</em> options are mapping our current directory inside the docker container so that all the work we do will be saved.</li>
+<li>We are naming the Docker container <em>heysolana</em></li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker run -it --rm -v <span style="color:#66d9ef">$(</span>pwd<span style="color:#66d9ef">)</span>:/solana-token -v <span style="color:#66d9ef">$(</span>pwd<span style="color:#66d9ef">)</span>/solana-data:/root/.config/solana heysolana
+</span></span></code></pre></div><h1 id="create-a-fake-solana-token">Create a <em>fake</em> Solana Token</h1>
+<ul>
+<li>We&rsquo;re creating a token on the Solana <em>devnet</em>.</li>
+<li>Why?</li>
+<li>We can brake stuff, it&rsquo;s free, and this might be where you will stop. You can do everything the <em>mainnet</em> can do, it is just considered a testing environment and you can&rsquo;t buy or sell tokens here. BUT&hellip;you can send and receive tokens. So, if that&rsquo;s all you care about, this is where you can leave off.</li>
+</ul>
+<h2 id="create-an-account-for-mint-authority">Create an account for <em>mint authority</em></h2>
+<ul>
+<li>This will be the account that will <em>own</em> the token we&rsquo;re creating.</li>
+<li>This is also a Solana wallet. You can send and receive Solana tokens with this wallet, or account.</li>
+<li>Here we are creating an account that will start with <em>dad</em> because it&rsquo;s the daddy of our new token, the boss.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>solana-keygen grind --starts-with dad:1
+</span></span></code></pre></div><h2 id="set-the-account-as-the-default-keypair">Set the account as the default keypair</h2>
+<ul>
+<li>With this command we are telling the Solana CLI to use this new account we just created as the default account for whatever we are doing.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>solana config set --keypair dad-your-token-acount.json
+</span></span></code></pre></div><h2 id="change-to-devnet">Change to devnet</h2>
+<ul>
+<li>With this command we are changing to the Solana <em>devnet</em> for this token.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>solana config set --url devnet
+</span></span></code></pre></div><h2 id="verify-your-config">Verify your config</h2>
+<ul>
+<li>This will output your current Solana CLI config</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>solana config get
+</span></span></code></pre></div><p>!<img alt="Image Description" src="/images/Pasted%20image%2020241204111256.png"></p>
+          
+        </div>
+
+        
+          <div>
+            <a class="read-more button inline" href="/posts/create-a-solana-token/">Read more</a>
+          </div>
+        
+      </article>
+    
+      <article class="post on-list">
+        <h2 class="post-title">
           <a href="/posts/the-future-of-ai-and-what-it-means-for-us---blog/">Some Raw Thoughts on AI</a>
         </h2>
 
@@ -365,44 +534,6 @@
         
       </article>
     
-      <article class="post on-list">
-        <h2 class="post-title">
-          <a href="/posts/another-test/">PLEAAASSEE WORK</a>
-        </h2>
-
-        <div class="post-meta"><time class="post-date">2024-11-15</time></div>
-
-        
-          <span class="post-tags">
-            
-            #<a href="/tags/tag1/">tag1</a>&nbsp;
-            
-            #<a href="/tags/tag2/">tag2</a>&nbsp;
-            
-          </span>
-        
-
-        
-
-
-        <div class="post-content">
-          
-            <p>!<img alt="Image Description" src="/images/Pasted%20image%2020241115183417.png"></p>
-<p>a;lsdjf;lkajsd;lkfaj;lksdfjl;kasjdfa
-sdfakljsd;flkajsdfa
-sdlkifa&rsquo;lskdfja;lskdfj
-Just another little test</p>
-<h1 id="yeessss">YEESSSS</h1>
-          
-        </div>
-
-        
-          <div>
-            <a class="read-more button inline" href="/posts/another-test/">Read more</a>
-          </div>
-        
-      </article>
-    
 
     <div class="pagination">
   <div class="pagination__buttons">
@@ -412,6 +543,11 @@ Just another little test</p>
         <span class="button__text">Newer posts</span>
       </a>
     
+    
+      <a href="/page/3/" class="button next">
+        <span class="button__text">Older posts</span>
+        <span class="button__icon">→</span>
+      </a>
     
   </div>
 </div>
