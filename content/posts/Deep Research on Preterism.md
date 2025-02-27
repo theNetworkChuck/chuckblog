@@ -1,5 +1,5 @@
 ---
-title: A post
+title: Deep Research on Preterism
 date: 2025-02-27
 draft: false
 tags:
